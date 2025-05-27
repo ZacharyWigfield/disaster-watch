@@ -37,7 +37,6 @@ export class SearchComponent implements OnInit {
   handleSearch() {
     const formData = this.searchForm.value;
     const jsonData = JSON.stringify(formData);
-    console.log(jsonData)
     this.searchService.getSearchResults().subscribe();
   }
 
