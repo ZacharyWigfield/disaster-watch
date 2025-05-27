@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/disasters")
+@RequestMapping("/api/disasters")
 public class DisasterController {
 
     private final DisasterService disasterService;

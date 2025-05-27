@@ -1,0 +1,37 @@
+.searchContainer{
+    margin:2rem
+}
+
+.searchCriteria {
+    display: flex;
+    justify-content: center;
+}
+
+.criteria {
+    width: 11vw;
+    margin: 2rem;
+}
+
+.searchBar {
+    display: flex;
+    justify-content: center;
+}
+
+#locationSearch{
+    width: 40vw;
+    height: 5vh;
+}
+
+:host ::ng-deep .p-slider {
+    margin-top: 1rem;
+}
+
+.searchButton{
+    height: 5vh;
+    width: 5vw;
+}
+
+.searchButton {
+    display: flex;
+    justify-content: center;
+}
