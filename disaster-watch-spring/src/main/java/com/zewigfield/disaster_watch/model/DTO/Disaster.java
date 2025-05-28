@@ -1,4 +1,4 @@
-package com.zewigfield.disaster_watch.model;
+package com.zewigfield.disaster_watch.model.DTO;
 
 public class Disaster {
     private String id;

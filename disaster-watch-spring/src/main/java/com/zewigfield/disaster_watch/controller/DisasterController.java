@@ -1,6 +1,8 @@
 package com.zewigfield.disaster_watch.controller;
 
-import com.zewigfield.disaster_watch.model.Disaster;
+import com.zewigfield.disaster_watch.model.DTO.Disaster;
+import com.zewigfield.disaster_watch.model.DTO.FlashFloodAlertDTO;
+import com.zewigfield.disaster_watch.repository.FlashFloodAlertRepository;
 import com.zewigfield.disaster_watch.service.DisasterService;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,9 +13,14 @@ import java.util.List;
 public class DisasterController {
 
     private final DisasterService disasterService;
+    private final FlashFloodAlertRepository flashFloodAlertRepository;
 
-    public DisasterController(DisasterService disasterService) {
+    public DisasterController(
+            DisasterService disasterService,
+            FlashFloodAlertRepository flashFloodAlertRepository
+    ) {
         this.disasterService = disasterService;
+        this.flashFloodAlertRepository = flashFloodAlertRepository;
     }
 
     @GetMapping("/search")
@@ -24,5 +31,12 @@ public class DisasterController {
             @RequestParam(required = false) List<String> types
     ) {
         return disasterService.searchDisasters(lat, lon, radius, types);
+    }
+
+    @GetMapping("/flood/warnings")
+    public List<FlashFloodAlertDTO> getFloodWarnings() {
+        return flashFloodAlertRepository.findAll().stream()
+                .map(FlashFloodAlertDTO::new)
+                .toList();
     }
 }

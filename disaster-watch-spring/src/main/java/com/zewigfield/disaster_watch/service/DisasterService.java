@@ -1,6 +1,6 @@
 package com.zewigfield.disaster_watch.service;
 
-import com.zewigfield.disaster_watch.model.Disaster;
+import com.zewigfield.disaster_watch.model.DTO.Disaster;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
