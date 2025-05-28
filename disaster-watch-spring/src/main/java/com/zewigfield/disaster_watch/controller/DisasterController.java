@@ -33,7 +33,7 @@ public class DisasterController {
         return disasterService.searchDisasters(lat, lon, radius, types);
     }
 
-    @GetMapping("/flood/warnings")
+    @GetMapping("/floods/warnings")
     public List<FlashFloodAlertDTO> getFloodWarnings() {
         return flashFloodAlertRepository.findAll().stream()
                 .map(FlashFloodAlertDTO::new)
