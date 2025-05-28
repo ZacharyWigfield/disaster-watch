@@ -1,14 +1,20 @@
 package com.zewigfield.disaster_watch.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zewigfield.disaster_watch.model.entity.FlashFloodAlert;
 import com.zewigfield.disaster_watch.repository.FlashFloodAlertRepository;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 
 import java.time.Instant;
-import java.util.Iterator;
 
 @Service
 public class FlashFloodAlertService {
@@ -24,10 +30,22 @@ public class FlashFloodAlertService {
     }
 
     public void fetchAndStoreAlerts() {
-        String url = "https://api.weather.gov/alerts?event=Flash%20Flood%20Warning";
+        String url = "https://api.weather.gov/alerts?event=Flash Flood Warning";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("User-Agent", "DisasterWatchApp/1.0 (zewigfield@gmail.com)");
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+
+        ResponseEntity<JsonNode> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                entity,
+                JsonNode.class
+        );
 
         // JsonNode is a generic JSON tree structure class. Useful for unpredictable JSON. Could refactor
-        JsonNode root = restTemplate.getForObject(url, JsonNode.class);
+        JsonNode root = response.getBody();
         if (root == null || !root.has("features")) return;
 
         for (JsonNode feature : root.get("features")) {
@@ -45,6 +63,5 @@ public class FlashFloodAlertService {
             repository.save(alert);
         }
     }
-
-
 }
+

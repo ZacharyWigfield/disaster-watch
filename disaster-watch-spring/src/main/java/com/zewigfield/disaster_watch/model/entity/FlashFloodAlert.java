@@ -11,17 +11,20 @@ public class FlashFloodAlert {
     @Id
     private String id;
 
-    @Column(name = "area_desc")
+    @Column(name = "area_desc", columnDefinition = "TEXT")
     private String areaDesc;
 
+    @Column(columnDefinition = "TEXT")
     private String event;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     private Instant effective;
 
     private Instant expires;
 
+    @Column(columnDefinition = "TEXT")
     private String geometry;
 
     public String getId() {
