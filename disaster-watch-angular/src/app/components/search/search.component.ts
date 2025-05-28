@@ -37,9 +37,8 @@ export class SearchComponent implements OnInit {
   handleSearch() {
     const formData = this.searchForm.value;
     const jsonData = JSON.stringify(formData);
-    this.searchService.getSearchResults().subscribe();
+    this.searchService.getFlashFloodWarnings().subscribe()
   }
-
 
   ngOnInit(): void {
   }

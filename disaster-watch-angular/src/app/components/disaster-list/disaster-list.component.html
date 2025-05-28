@@ -1,26 +1,22 @@
 <ng-container *ngIf="searchInitiated">
-    <ng-container *ngIf="disasterResults$ | async as disasterResults">
-        <p-table [value]="disasterResults">
+    <ng-container *ngIf="floodWarningResults$ | async as floodWarningResults">
+        <p-table [value]="floodWarningResults" [paginator]="true" [rows]="25">
             <ng-template #header>
                 <tr>
-                    <th>Type</th>
+                    <th>Area</th>
+                    <th>Event</th>
                     <th>Description</th>
-                    <th>Lat</th>
-                    <th>Long</th>
-                    <th>Severity</th>
-                    <th>Source</th>
-                    <th>Date</th>
+                    <th>Effective</th>
+                    <th>Expires</th>
                 </tr>
             </ng-template>
-            <ng-template #body let-disaster>
+            <ng-template #body let-warning>
                 <tr>
-                    <td>{{ disaster.type }}</td>
-                    <td>{{ disaster.description }}</td>
-                    <td>{{ disaster.latitude }}</td>
-                    <td>{{ disaster.longitude }}</td>
-                    <td>{{ disaster.severity }}</td>
-                    <td>{{ disaster.source }}</td>
-                    <td>{{ disaster.date }}</td>
+                    <td>{{ warning.areaDesc }}</td>
+                    <td>{{ warning.event }}</td>
+                    <td>{{ warning.description }}</td>
+                    <td>{{ warning.effective }}</td>
+                    <td>{{ warning.expires }}</td>
                 </tr>
             </ng-template>
         </p-table>

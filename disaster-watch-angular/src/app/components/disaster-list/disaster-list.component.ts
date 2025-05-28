@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { SearchService } from '../../services/search.service';
-import { Disasters } from '../../shared/model/disasters';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { Observable } from 'rxjs';
+import { FlashFloodWarnings } from '../../shared/model/flashFloodWarnings';
 
 @Component({
   standalone: true,
@@ -13,15 +13,15 @@ import { Observable } from 'rxjs';
   styleUrl: './disaster-list.component.scss'
 })
 export class DisasterListComponent implements OnInit {
-  disasterResults$: Observable<Disasters[] | null> | undefined;
+  floodWarningResults$: Observable<FlashFloodWarnings[]> | null | undefined;
   searchInitiated = false;
 
   constructor(private searchService: SearchService) { }
 
   ngOnInit() {
-    this.disasterResults$ = this.searchService.disasterResults$;
+    this.floodWarningResults$ = this.searchService.floodWarningResults$
 
-    this.disasterResults$.subscribe(results => {
+    this.floodWarningResults$.subscribe(results => {
       if (results && results.length > 0) {
         this.searchInitiated = true;
       }
