@@ -12,7 +12,13 @@
             </ng-template>
             <ng-template #body let-warning>
                 <tr>
-                    <td>{{ warning.areaDesc }}</td>
+                    <td>
+                        <ng-container *ngFor="let area of warning.areaDesc">
+                            <ul>
+                                <li>{{area}}</li>
+                            </ul>
+                        </ng-container>
+                    </td>
                     <td>{{ warning.event }}</td>
                     <td>{{ warning.description }}</td>
                     <td>{{ warning.effective }}</td>

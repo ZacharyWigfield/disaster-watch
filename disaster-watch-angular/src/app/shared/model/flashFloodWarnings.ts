@@ -1,6 +1,6 @@
 export type FlashFloodWarnings = {
     id: string,
-    areaDesc: string,
+    areaDesc: string[],
     event: string,
     description: string,
     effective: Date,
