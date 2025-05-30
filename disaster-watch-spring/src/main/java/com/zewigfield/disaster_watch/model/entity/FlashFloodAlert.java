@@ -27,6 +27,13 @@ public class FlashFloodAlert {
     @Column(columnDefinition = "TEXT")
     private String geometry;
 
+    @Column(name = "same_geocode")
+    private String sameGeocode;
+
+    @Column(name = "ugc_geocode")
+    private String ugcGeocode;
+
+
     public String getId() {
         return id;
     }
@@ -81,6 +88,22 @@ public class FlashFloodAlert {
 
     public void setGeometry(String geometry) {
         this.geometry = geometry;
+    }
+
+    public String getSameGeocode() {
+        return sameGeocode;
+    }
+
+    public void setSameGeocode(String sameGeocode) {
+        this.sameGeocode = sameGeocode;
+    }
+
+    public String getUgcGeocode() {
+        return ugcGeocode;
+    }
+
+    public void setUgcGeocode(String ugcGeocode) {
+        this.ugcGeocode = ugcGeocode;
     }
 
 }

@@ -26,7 +26,7 @@ public class FlashFloodAlertService {
     }
 
     public void fetchAndStoreAlerts() {
-        String url = "https://api.weather.gov/alerts?event=Flash Flood Warning";
+        String url = "https://api.weather.gov/alerts/active?status=actual&event=Flood Warning&severity=Extreme,Severe&certainty=Observed";
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("User-Agent", "DisasterWatchApp/1.0 (zewigfield@gmail.com)");
@@ -46,15 +46,18 @@ public class FlashFloodAlertService {
 
         for (JsonNode feature : root.get("features")) {
             JsonNode properties = feature.get("properties");
+            JsonNode geocode = properties.get("geocode");
 
             FlashFloodAlert alert = new FlashFloodAlert();
             alert.setId(properties.get("id").asText());
-            alert.setAreaDesc(properties.get("areaDesc").asText());
-            alert.setEvent(properties.get("event").asText());
+            alert.setAreaDesc(properties.get("areaDesc").asText(null));
+            alert.setEvent(properties.get("event").asText(null));
             alert.setDescription(properties.get("description").asText(null));
-            alert.setEffective(Instant.parse(properties.get("effective").asText()));
-            alert.setExpires(Instant.parse(properties.get("expires").asText()));
+            alert.setEffective(Instant.parse(properties.get("effective").asText(null)));
+            alert.setExpires(Instant.parse(properties.get("expires").asText(null)));
             alert.setGeometry(feature.get("geometry").toString());
+            alert.setSameGeocode(geocode.get("SAME").toString());
+            alert.setUgcGeocode(geocode.get("UGC").toString());
 
             repository.save(alert);
         }

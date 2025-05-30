@@ -33,6 +33,7 @@ public class DisasterController {
         return disasterService.searchDisasters(lat, lon, radius, types);
     }
 
+    // these are flood warnings events where flooding has actually been observed and is an extreme or severe severity
     @GetMapping("/floods/warnings")
     public List<FlashFloodAlertDTO> getFloodWarnings() {
         return flashFloodAlertRepository.findAll().stream()
