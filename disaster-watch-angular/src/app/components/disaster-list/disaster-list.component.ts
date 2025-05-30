@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { Observable } from 'rxjs';
 import { FlashFloodWarnings } from '../../shared/model/flashFloodWarnings';
+import { RouterLink } from '@angular/router';
 
 @Component({
   standalone: true,
   selector: 'app-disaster-list',
-  imports: [TableModule, CommonModule],
+  imports: [TableModule, CommonModule, RouterLink],
   templateUrl: './disaster-list.component.html',
   styleUrl: './disaster-list.component.scss'
 })

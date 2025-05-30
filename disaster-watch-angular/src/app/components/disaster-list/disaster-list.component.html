@@ -15,14 +15,16 @@
                     <td>
                         <ng-container *ngFor="let area of warning.areaDesc">
                             <ul>
-                                <li>{{area}}</li>
+                                <li>
+                                    <a routerLink="/flooded-area">{{area}}</a>
+                                </li>
                             </ul>
                         </ng-container>
                     </td>
                     <td>{{ warning.event }}</td>
                     <td>{{ warning.description }}</td>
-                    <td>{{ warning.effective }}</td>
-                    <td>{{ warning.expires }}</td>
+                    <td>{{ warning.effective | date:'short' }}</td>
+                    <td>{{ warning.expires | date:'short' }}</td>
                 </tr>
             </ng-template>
         </p-table>
