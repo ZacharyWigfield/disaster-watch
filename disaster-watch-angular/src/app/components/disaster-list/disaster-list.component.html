@@ -6,6 +6,9 @@
                     <th>Area</th>
                     <th>Event</th>
                     <th>Description</th>
+                    <th>Certainty</th>
+                    <th>Severity</th>
+                    <th>Urgency</th>
                     <th>Effective</th>
                     <th>Expires</th>
                 </tr>
@@ -23,6 +26,9 @@
                     </td>
                     <td>{{ warning.event }}</td>
                     <td>{{ warning.description }}</td>
+                    <td>{{ warning.certainty }}</td>
+                    <td>{{ warning.severity }}</td>
+                    <td>{{ warning.urgency }}</td>
                     <td>{{ warning.effective | date:'short' }}</td>
                     <td>{{ warning.expires | date:'short' }}</td>
                 </tr>
