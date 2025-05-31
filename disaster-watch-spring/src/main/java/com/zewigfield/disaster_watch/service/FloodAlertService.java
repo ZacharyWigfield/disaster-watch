@@ -3,13 +3,13 @@ package com.zewigfield.disaster_watch.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zewigfield.disaster_watch.model.entity.FloodAlertEntity;
 import com.zewigfield.disaster_watch.repository.FloodAlertRepository;
+import org.locationtech.jts.geom.*;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 import java.time.Instant;
 
 @Service
@@ -47,6 +47,13 @@ public class FloodAlertService {
         for (JsonNode feature : root.get("features")) {
             JsonNode properties = feature.get("properties");
             JsonNode geocode = properties.get("geocode");
+            JsonNode firstCoord = feature.get("geometry").get("coordinates").get(0).get(0); // getting first lat/long value
+
+            double lon = firstCoord.get(0).asDouble();
+            double lat = firstCoord.get(1).asDouble();
+
+            GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
+            Point point = geometryFactory.createPoint(new Coordinate(lon, lat));
 
             FloodAlertEntity alert = new FloodAlertEntity();
             alert.setId(properties.get("id").asText());
@@ -58,12 +65,15 @@ public class FloodAlertService {
             alert.setUrgency(properties.get("urgency").asText(null));
             alert.setEffective(Instant.parse(properties.get("effective").asText(null)));
             alert.setExpires(Instant.parse(properties.get("expires").asText(null)));
-            alert.setGeometry(feature.get("geometry").toString());
+            alert.setLatitude(lat);
+            alert.setLongitude(lon);
+            alert.setLocation(point);
             alert.setSameGeocode(geocode.get("SAME").toString());
             alert.setUgcGeocode(geocode.get("UGC").toString());
 
             repository.save(alert);
         }
     }
+
 }
 
