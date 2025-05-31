@@ -26,7 +26,7 @@ public class FloodAlertService {
     }
 
     public void fetchAndStoreAlerts() {
-        String url = "https://api.weather.gov/alerts/active?status=actual&event=Flood Warning,Flash Flood Warning&severity=Extreme,Severe&certainty=Observed,Likely";
+        String url = "https://api.weather.gov/alerts/active?status=actual&event=Flood Warning,Flash Flood Warning&severity=Extreme,Severe,Moderate&certainty=Observed,Likely";
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("User-Agent", "DisasterWatchApp/1.0 (zewigfield@gmail.com)");
