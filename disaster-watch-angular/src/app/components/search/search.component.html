@@ -23,8 +23,9 @@
             <div class="criteria">
                 <p-floatlabel>
                     <label for="disasterType">Disaster Type: </label>
-                    <p-multiSelect id="disasterType" [options]="DISASTER_TYPES" formControlName="disasterType"
-                        filter="false" />
+                    <p-multiSelect #disasterSelect id="disasterType" [options]="DISASTER_TYPES"
+                        formControlName="disasterType" filter="false" >
+                    </p-multiSelect>
                 </p-floatlabel>
             </div>
 

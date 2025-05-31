@@ -26,18 +26,18 @@ export class SearchComponent implements OnInit {
   DISASTER_TYPES = DISASTER_TYPES
   today = new Date()
   oneWeekAgo = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000)
-  radiusPickValue = 50
+  radiusPickValue = 100
   searchForm = new FormGroup({
     searchBar: new FormControl<string>(''),
     radiusPick: new FormControl<number>(this.radiusPickValue),
     disasterType: new FormControl<string[]>(DISASTER_TYPES),
-    dateRange: new FormControl<Date[]>([this.today, this.oneWeekAgo])
+    dateRange: new FormControl<Date[]>([this.oneWeekAgo, this.today])
   })
 
   handleSearch() {
     const formData = this.searchForm.value;
     const jsonData = JSON.stringify(formData);
-    this.searchService.getFlashFloodWarnings().subscribe()
+    this.searchService.getFloodWarnings().subscribe()
   }
 
   ngOnInit(): void {

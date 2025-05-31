@@ -1,11 +1,11 @@
 <ng-container *ngIf="searchInitiated">
     <ng-container *ngIf="floodWarningResults$ | async as floodWarningResults">
-        <p-table [value]="floodWarningResults" [paginator]="true" [rows]="25">
+        <p-table [value]="floodWarningResults" [paginator]="true" [rows]="25" showGridlines stripedRows>
             <ng-template #header>
                 <tr>
                     <th>Area</th>
                     <th>Event</th>
-                    <th>Description</th>
+                    <th style="width:50%">Description</th>
                     <th>Certainty</th>
                     <th>Severity</th>
                     <th>Urgency</th>

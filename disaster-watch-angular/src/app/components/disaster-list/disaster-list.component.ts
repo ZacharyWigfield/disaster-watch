@@ -3,7 +3,7 @@ import { SearchService } from '../../services/search.service';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { Observable } from 'rxjs';
-import { FlashFloodWarnings } from '../../shared/model/flashFloodWarnings';
+import { FloodWarnings } from '../../shared/model/floodWarnings';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -14,7 +14,7 @@ import { RouterLink } from '@angular/router';
   styleUrl: './disaster-list.component.scss'
 })
 export class DisasterListComponent implements OnInit {
-  floodWarningResults$: Observable<FlashFloodWarnings[]> | null | undefined;
+  floodWarningResults$: Observable<FloodWarnings[]> | null | undefined;
   searchInitiated = false;
 
   constructor(private searchService: SearchService) { }
