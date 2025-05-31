@@ -1,7 +1,7 @@
 package com.zewigfield.disaster_watch;
 
-import com.zewigfield.disaster_watch.repository.FlashFloodAlertRepository;
-import com.zewigfield.disaster_watch.service.FlashFloodAlertService;
+import com.zewigfield.disaster_watch.repository.FloodAlertRepository;
+import com.zewigfield.disaster_watch.service.FloodAlertService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -11,10 +11,10 @@ import java.time.temporal.ChronoUnit;
 @Component
 public class AppStartupRunner implements CommandLineRunner {
 
-    private final FlashFloodAlertService service;
-    private final FlashFloodAlertRepository repository;
+    private final FloodAlertService service;
+    private final FloodAlertRepository repository;
 
-    public AppStartupRunner(FlashFloodAlertService service, FlashFloodAlertRepository repository) {
+    public AppStartupRunner(FloodAlertService service, FloodAlertRepository repository) {
         this.service = service;
         this.repository = repository;
     }

@@ -1,12 +1,11 @@
 package com.zewigfield.disaster_watch.model.entity;
 
 import jakarta.persistence.*;
-
 import java.time.Instant;
 
 @Entity
-@Table(name = "flash_flood_alerts")
-public class FlashFloodAlert {
+@Table(name = "flood_alerts")
+public class FloodAlertEntity {
 
     @Id
     private String id;
@@ -19,6 +18,12 @@ public class FlashFloodAlert {
 
     @Column(columnDefinition = "TEXT")
     private String description;
+
+    private String severity;
+
+    private String certainty;
+
+    private String urgency;
 
     private Instant effective;
 
@@ -64,6 +69,30 @@ public class FlashFloodAlert {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getSeverity() {
+        return severity;
+    }
+
+    public void setSeverity(String severity) {
+        this.severity = severity;
+    }
+
+    public String getCertainty() {
+        return certainty;
+    }
+
+    public void setCertainty(String certainty) {
+        this.certainty = certainty;
+    }
+
+    public String getUrgency() {
+        return urgency;
+    }
+
+    public void setUrgency(String urgency) {
+        this.urgency = urgency;
     }
 
     public Instant getEffective() {

@@ -1,9 +1,7 @@
 package com.zewigfield.disaster_watch.controller;
 
-import com.zewigfield.disaster_watch.model.DTO.Disaster;
-import com.zewigfield.disaster_watch.model.DTO.FlashFloodAlertDTO;
-import com.zewigfield.disaster_watch.repository.FlashFloodAlertRepository;
-import com.zewigfield.disaster_watch.service.DisasterService;
+import com.zewigfield.disaster_watch.model.DTO.FloodAlertDTO;
+import com.zewigfield.disaster_watch.repository.FloodAlertRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,32 +10,19 @@ import java.util.List;
 @RequestMapping("/api/disasters")
 public class DisasterController {
 
-    private final DisasterService disasterService;
-    private final FlashFloodAlertRepository flashFloodAlertRepository;
+    private final FloodAlertRepository floodAlertRepository;
 
     public DisasterController(
-            DisasterService disasterService,
-            FlashFloodAlertRepository flashFloodAlertRepository
+            FloodAlertRepository floodAlertRepository
     ) {
-        this.disasterService = disasterService;
-        this.flashFloodAlertRepository = flashFloodAlertRepository;
+        this.floodAlertRepository = floodAlertRepository;
     }
 
-    @GetMapping("/search")
-    public List<Disaster> searchDisasters(
-            @RequestParam double lat,
-            @RequestParam double lon,
-            @RequestParam(defaultValue = "50") int radius,
-            @RequestParam(required = false) List<String> types
-    ) {
-        return disasterService.searchDisasters(lat, lon, radius, types);
-    }
-
-    // these are flood warnings events where flooding has actually been observed and is an extreme or severe severity
+    // returns flood and flash flood warnings of extreme and severe severity and observed and likely certainty
     @GetMapping("/floods/warnings")
-    public List<FlashFloodAlertDTO> getFloodWarnings() {
-        return flashFloodAlertRepository.findAll().stream()
-                .map(FlashFloodAlertDTO::new)
+    public List<FloodAlertDTO> getFloodWarnings() {
+        return floodAlertRepository.findAll().stream()
+                .map(FloodAlertDTO::new)
                 .toList();
     }
 }
