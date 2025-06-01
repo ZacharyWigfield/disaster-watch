@@ -18,12 +18,12 @@ export class SearchService {
   getFloodWarnings(searchCriteria: SearchCriteria): Observable<FloodWarnings[]> {
     const url = `${this.serverURL}/api/disasters/floods/warnings`
     let params = new HttpParams()
-      .set('search', searchCriteria.searchBar)
+      .set('searchLocation', searchCriteria.searchBar)
       .set('radius', searchCriteria.radiusPick.toString())
       .set('startDate', searchCriteria.dateRange[0].toISOString())
       .set('endDate', searchCriteria.dateRange[1].toISOString());
     for (const type of searchCriteria.disasterType) {
-      params = params.append('disasterType', type);
+      params = params.append('eventType', type);
     }
 
     return this.http.get<FloodWarnings[]>(url, { params }).pipe(tap(results => this.floodWarningsSubject.next(results)))

@@ -1,4 +1,4 @@
  export const DISASTER_TYPES = [
-    'Floods',
-    'Flash Floods'
+    'Flood Warning',
+    'Flash Flood Warning'
   ]
