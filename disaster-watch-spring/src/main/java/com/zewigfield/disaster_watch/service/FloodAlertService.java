@@ -1,6 +1,7 @@
 package com.zewigfield.disaster_watch.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.zewigfield.disaster_watch.model.DTO.FloodAlertDTO;
 import com.zewigfield.disaster_watch.model.entity.FloodAlertEntity;
 import com.zewigfield.disaster_watch.repository.FloodAlertRepository;
 import org.locationtech.jts.geom.*;
@@ -10,7 +11,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
 import java.time.Instant;
+import java.util.List;
 
 @Service
 public class FloodAlertService {
@@ -73,6 +76,10 @@ public class FloodAlertService {
 
             repository.save(alert);
         }
+    }
+
+    public List<FloodAlertDTO> getFilteredFloodAlerts(List<String> eventType, Instant startDate, Instant endDate, String searchLocation, int radius) {
+        return this.repository.findByParams(eventType, startDate, endDate);
     }
 
 }
