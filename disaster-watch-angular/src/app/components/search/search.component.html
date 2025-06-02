@@ -6,7 +6,7 @@
                 formControlName="searchBar" />
             <div>
                 <button pButton pRipple id="searchButton" class="searchButton" icon="pi pi-search" severity="success"
-                    (click)="handleSearch()">
+                    (click)="handleSearch()" [disabled]="!searchForm.valid">
                     Search
                 </button>
             </div>

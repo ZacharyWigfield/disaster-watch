@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DatePicker } from 'primeng/datepicker';
 import { MultiSelect } from 'primeng/multiselect';
 import { Slider } from 'primeng/slider';
@@ -35,7 +35,7 @@ export class SearchComponent implements OnInit {
   oneWeekAgo = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000);
   radiusPickValue = 100;
   searchForm: SearchCriteriaFormGroup = new FormGroup({
-    searchBar: new FormControl<string>('', { nonNullable: true }),
+    searchBar: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
     radiusPick: new FormControl<number>(this.radiusPickValue, { nonNullable: true }),
     disasterType: new FormControl<string[]>(DISASTER_TYPES, { nonNullable: true }),
     dateRange: new FormControl<[Date, Date]>([this.oneWeekAgo, this.today], { nonNullable: true })
