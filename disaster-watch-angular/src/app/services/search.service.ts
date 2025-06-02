@@ -9,8 +9,11 @@ import { SearchCriteria } from '../shared/model/searchCriteria';
   providedIn: 'root'
 })
 export class SearchService {
-  private floodWarningsSubject = new BehaviorSubject<FloodWarnings[]>([])
-  floodWarningResults$ = this.floodWarningsSubject.asObservable()
+  private floodWarningsSubject = new BehaviorSubject<FloodWarnings[]>([]);
+  floodWarningResults$ = this.floodWarningsSubject.asObservable();
+
+  loadingSubject = new BehaviorSubject<boolean>(false);
+  searchLoading$ = this.loadingSubject.asObservable();
 
   constructor(private http: HttpClient) { }
   serverURL = 'http://localhost:8080'
@@ -26,6 +29,10 @@ export class SearchService {
       params = params.append('eventType', type);
     }
 
-    return this.http.get<FloodWarnings[]>(url, { params }).pipe(tap(results => this.floodWarningsSubject.next(results)))
+    return this.http.get<FloodWarnings[]>(url, { params }).pipe(tap(results => {
+      this.floodWarningsSubject.next(results)
+      this.loadingSubject.next(false)
+    }
+    ))
   }
 }

@@ -2,32 +2,46 @@ import { Component, OnInit } from '@angular/core';
 import { SearchService } from '../../services/search.service';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { FloodWarnings } from '../../shared/model/floodWarnings';
 import { RouterLink } from '@angular/router';
+import { LoadingComponent } from '../loading/loading.component';
 
 @Component({
   standalone: true,
   selector: 'app-disaster-list',
-  imports: [TableModule, CommonModule, RouterLink],
+  imports: [TableModule, CommonModule, RouterLink, LoadingComponent],
   templateUrl: './disaster-list.component.html',
   styleUrl: './disaster-list.component.scss'
 })
 export class DisasterListComponent implements OnInit {
-  floodWarningResults$: Observable<FloodWarnings[]> | null | undefined;
+  floodWarningResults$: Observable<FloodWarnings[]>;
   searchInitiated = false;
+  isLoading = false;
 
-  constructor(private searchService: SearchService) { }
+  private destroy$ = new Subject<void>();
+
+  constructor(private searchService: SearchService) {
+    this.floodWarningResults$ = this.searchService.floodWarningResults$;
+   }
 
   ngOnInit() {
-    this.floodWarningResults$ = this.searchService.floodWarningResults$
+    this.searchService.searchLoading$
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(loading => this.isLoading = loading);
 
-    this.floodWarningResults$.subscribe(results => {
+    this.floodWarningResults$
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(results => {
       if (results && results.length > 0) {
         this.searchInitiated = true;
       }
     });
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
 }
