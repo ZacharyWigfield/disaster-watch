@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { FloodedAreaComponent } from './screens/flooded-area/flooded-area.component';
 import { HomeComponent } from './screens/home/home.component';
+import { EventDetailsComponent } from './screens/event-details/event-details.component';
 
 export const routes: Routes = [
     {
@@ -8,7 +8,7 @@ export const routes: Routes = [
         component: HomeComponent,
     },
     {
-        path: 'flooded-area',
-        component: FloodedAreaComponent,
+        path: 'details',
+        component: EventDetailsComponent,
     },
 ];
