@@ -1,6 +1,7 @@
 package com.zewigfield.disaster_watch.model.DTO;
 
 import com.zewigfield.disaster_watch.model.entity.FloodAlertEntity;
+
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
@@ -15,6 +16,8 @@ public class FloodAlertDTO {
     private final String urgency;
     private final Instant effective;
     private final Instant expires;
+    private final Double latitude;
+    private final Double longitude;
 
     public FloodAlertDTO(FloodAlertEntity alert) {
         this.id = alert.getId();
@@ -26,19 +29,55 @@ public class FloodAlertDTO {
         this.urgency = alert.getUrgency();
         this.effective = alert.getEffective();
         this.expires = alert.getExpires();
+        this.latitude = alert.getLatitude();
+        this.longitude = alert.getLongitude();
     }
 
-    private List<String> parseAreaDesc (String areaDesc){
+    private List<String> parseAreaDesc(String areaDesc) {
         return Arrays.stream(areaDesc.split(";")).map(String::trim).toList();
     }
 
-    public String getId() { return id; }
-    public List<String> getAreaDesc() { return areaDesc; }
-    public String getEvent() { return event; }
-    public String getDescription() { return description; }
-    public String getCertainty() { return certainty; }
-    public String getSeverity() { return severity; }
-    public String getUrgency() {return urgency; }
-    public Instant getEffective() { return effective; }
-    public Instant getExpires() { return expires; }
+    public String getId() {
+        return id;
+    }
+
+    public List<String> getAreaDesc() {
+        return areaDesc;
+    }
+
+    public String getEvent() {
+        return event;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getCertainty() {
+        return certainty;
+    }
+
+    public String getSeverity() {
+        return severity;
+    }
+
+    public String getUrgency() {
+        return urgency;
+    }
+
+    public Instant getEffective() {
+        return effective;
+    }
+
+    public Instant getExpires() {
+        return expires;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
 }

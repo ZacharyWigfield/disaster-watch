@@ -19,13 +19,13 @@ import java.util.List;
 public class FloodAlertService {
 
     private final FloodAlertRepository repository;
-    // rest template is a spring provided class used for http requests to external APIs
-    // spring recommends using WebClient instead, so look into this
     private final RestTemplate restTemplate;
+    private final GeocodingService geocodingService;
 
-    public FloodAlertService(FloodAlertRepository repository) {
+    public FloodAlertService(FloodAlertRepository repository, GeocodingService geocodingService) {
         this.repository = repository;
         this.restTemplate = new RestTemplate();
+        this.geocodingService = geocodingService;
     }
 
     public void fetchAndStoreAlerts() {
@@ -79,7 +79,27 @@ public class FloodAlertService {
     }
 
     public List<FloodAlertDTO> getFilteredFloodAlerts(List<String> eventType, Instant startDate, Instant endDate, String searchLocation, int radius) {
-        return this.repository.findByParams(eventType, startDate, endDate);
+        GeocodingService.Coordinates userCoords = geocodingService.geocode(searchLocation);
+        List <FloodAlertDTO> alerts = this.repository.findByParams(eventType, startDate, endDate);
+
+        return alerts.stream()
+                .filter(alert -> isWithinRadius(
+                        userCoords.latitude(),
+                        userCoords.longitude(),
+                        alert.getLatitude(),
+                        alert.getLongitude(),
+                        radius)).toList();
+    }
+
+    public boolean isWithinRadius(double lat1, double lon1, double lat2, double lon2, double userRadius) {
+        final double EARTH_RADIUS_MILES = 3958.8;
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return EARTH_RADIUS_MILES * c <= userRadius;
     }
 
 }
