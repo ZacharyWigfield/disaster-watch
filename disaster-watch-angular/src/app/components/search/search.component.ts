@@ -42,12 +42,16 @@ export class SearchComponent implements OnInit {
   });
 
   handleSearch() {
-    this.searchService.loadingSubject.next(true)
     const formData: SearchCriteria = this.searchForm.getRawValue();
+
     this.searchService.getFloodWarnings(formData).subscribe({
       error: (err) => {
         this.searchService.loadingSubject.next(false)
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message })
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: err?.error?.message || 'Failed to fetch flood warnings'
+        })
       }
     });
   }
