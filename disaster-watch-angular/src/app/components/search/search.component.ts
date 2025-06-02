@@ -24,12 +24,6 @@ import { SearchCriteria, SearchCriteriaFormGroup } from '../../shared/model/sear
 })
 
 export class SearchComponent implements OnInit {
-
-  constructor(
-    private searchService: SearchService,
-    private messageService: MessageService
-  ) { }
-
   DISASTER_TYPES = DISASTER_TYPES
   today = new Date();
   oneWeekAgo = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -40,6 +34,11 @@ export class SearchComponent implements OnInit {
     disasterType: new FormControl<string[]>(DISASTER_TYPES, { nonNullable: true }),
     dateRange: new FormControl<[Date, Date]>([this.oneWeekAgo, this.today], { nonNullable: true })
   });
+
+  constructor(
+    private searchService: SearchService,
+    private messageService: MessageService
+  ) { }
 
   handleSearch() {
     const formData: SearchCriteria = this.searchForm.getRawValue();
