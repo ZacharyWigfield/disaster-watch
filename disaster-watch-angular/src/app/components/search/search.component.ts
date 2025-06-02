@@ -5,15 +5,20 @@ import { MultiSelect } from 'primeng/multiselect';
 import { Slider } from 'primeng/slider';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { ToastModule } from 'primeng/toast';
 import { FloatLabel } from 'primeng/floatlabel';
+import { MessageService } from 'primeng/api';
 import { SearchService } from '../../services/search.service';
 import { DISASTER_TYPES } from '../../shared/constants/disaster-types.constant';
 import { SearchCriteria, SearchCriteriaFormGroup } from '../../shared/model/searchCriteria';
 
+
 @Component({
   standalone: true,
   selector: 'app-search',
-  imports: [ReactiveFormsModule, Slider, DatePicker, MultiSelect, ButtonModule, InputTextModule, FloatLabel],
+  imports: [ReactiveFormsModule, Slider, DatePicker, MultiSelect,
+    ButtonModule, InputTextModule, FloatLabel, ToastModule],
+  providers: [MessageService],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss'
 })
@@ -21,7 +26,8 @@ import { SearchCriteria, SearchCriteriaFormGroup } from '../../shared/model/sear
 export class SearchComponent implements OnInit {
 
   constructor(
-    private searchService: SearchService
+    private searchService: SearchService,
+    private messageService: MessageService
   ) { }
 
   DISASTER_TYPES = DISASTER_TYPES
@@ -37,7 +43,11 @@ export class SearchComponent implements OnInit {
 
   handleSearch() {
     const formData: SearchCriteria = this.searchForm.getRawValue();
-    this.searchService.getFloodWarnings(formData).subscribe();
+    this.searchService.getFloodWarnings(formData).subscribe({
+      error: (err) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.message })
+      }
+    });
   }
 
   ngOnInit(): void {

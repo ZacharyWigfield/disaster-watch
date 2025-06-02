@@ -1,4 +1,5 @@
 <div class="searchContainer">
+    <p-toast position="top-right" />
     <form class="searchForm" [formGroup]="searchForm">
         <div class="searchBar">
             <input id="locationSearch" type="text" placeholder="Enter an address, city, or zip code" pInputText
@@ -24,7 +25,7 @@
                 <p-floatlabel>
                     <label for="disasterType">Disaster Type: </label>
                     <p-multiSelect #disasterSelect id="disasterType" [options]="DISASTER_TYPES"
-                        formControlName="disasterType" filter="false" >
+                        formControlName="disasterType" filter="false">
                     </p-multiSelect>
                 </p-floatlabel>
             </div>
