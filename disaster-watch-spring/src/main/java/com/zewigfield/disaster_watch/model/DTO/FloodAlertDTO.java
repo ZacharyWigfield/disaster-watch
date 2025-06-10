@@ -1,10 +1,13 @@
 package com.zewigfield.disaster_watch.model.DTO;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zewigfield.disaster_watch.model.entity.FloodAlertEntity;
+import org.locationtech.jts.geom.Geometry;
 
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class FloodAlertDTO {
     private final Long id;
@@ -80,4 +83,5 @@ public class FloodAlertDTO {
     public Double getLongitude() {
         return longitude;
     }
+
 }

@@ -3,6 +3,7 @@ package com.zewigfield.disaster_watch.model.entity;
 import jakarta.persistence.*;
 import java.time.Instant;
 import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.Polygon;
 
 
 @Entity
@@ -42,6 +43,9 @@ public class FloodAlertEntity {
 
     @Column(columnDefinition = "geometry(Point, 4326)")
     private Point location;
+
+    @Column(name = "flood_area", columnDefinition = "geometry(Polygon, 4326)", nullable = false)
+    private Polygon floodArea;
 
     @Column(name = "same_geocode")
     private String sameGeocode;
@@ -152,6 +156,14 @@ public class FloodAlertEntity {
 
     public void setLocation(Point location) {
         this.location = location;
+    }
+
+    public Polygon getFloodArea() {
+        return floodArea;
+    }
+
+    public void setFloodArea(Polygon floodArea) {
+        this.floodArea = floodArea;
     }
 
     public String getSameGeocode() {
