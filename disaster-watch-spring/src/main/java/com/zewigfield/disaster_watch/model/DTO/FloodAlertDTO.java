@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class FloodAlertDTO {
-    private final String id;
+    private final Long id;
     private final List<String> areaDesc;
     private final String event;
     private final String description;
@@ -37,7 +37,7 @@ public class FloodAlertDTO {
         return Arrays.stream(areaDesc.split(";")).map(String::trim).toList();
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 

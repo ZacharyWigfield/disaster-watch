@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
+
 
 public interface FloodAlertRepository extends JpaRepository<FloodAlertEntity, String> {
     @Modifying
@@ -19,6 +21,8 @@ public interface FloodAlertRepository extends JpaRepository<FloodAlertEntity, St
 
     @Query("SELECT new com.zewigfield.disaster_watch.model.DTO.FloodAlertDTO(f) FROM FloodAlertEntity f")
     List<FloodAlertDTO> findAllAsDTO();
+
+    Optional<FloodAlertEntity> findByExternalId(String externalId);
 
     @Query(value = """
             SELECT new com.zewigfield.disaster_watch.model.DTO.FloodAlertDTO(f)

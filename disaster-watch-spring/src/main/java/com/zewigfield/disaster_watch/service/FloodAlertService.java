@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FloodAlertService {
@@ -59,7 +60,7 @@ public class FloodAlertService {
             Point point = geometryFactory.createPoint(new Coordinate(lon, lat));
 
             FloodAlertEntity alert = new FloodAlertEntity();
-            alert.setId(properties.get("id").asText());
+            alert.setExternalId(properties.get("id").asText());
             alert.setAreaDesc(properties.get("areaDesc").asText(null));
             alert.setEvent(properties.get("event").asText(null));
             alert.setDescription(properties.get("description").asText(null));
@@ -74,7 +75,10 @@ public class FloodAlertService {
             alert.setSameGeocode(geocode.get("SAME").toString());
             alert.setUgcGeocode(geocode.get("UGC").toString());
 
-            repository.save(alert);
+            Optional<FloodAlertEntity> existing = repository.findByExternalId(alert.getExternalId());
+            if (existing.isEmpty()) {
+                repository.save(alert);
+            }
         }
     }
 

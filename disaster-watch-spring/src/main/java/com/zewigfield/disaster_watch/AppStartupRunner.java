@@ -21,8 +21,8 @@ public class AppStartupRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        pruneOldAlerts();
         service.fetchAndStoreAlerts();
+        pruneOldAlerts();
     }
 
     public void pruneOldAlerts() {

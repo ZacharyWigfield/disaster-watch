@@ -4,12 +4,18 @@ import jakarta.persistence.*;
 import java.time.Instant;
 import org.locationtech.jts.geom.Point;
 
+
 @Entity
 @Table(name = "flood_alerts")
 public class FloodAlertEntity {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(columnDefinition = "BIGINT")
+    private Long id;
+
+    @Column(name = "external_id", columnDefinition = "TEXT", unique = true, nullable = false)
+    private String externalId;
 
     @Column(name = "area_desc", columnDefinition = "TEXT")
     private String areaDesc;
@@ -44,12 +50,20 @@ public class FloodAlertEntity {
     private String ugcGeocode;
 
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getExternalId() {
+        return externalId;
+    }
+
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
     }
 
     public String getAreaDesc() {
