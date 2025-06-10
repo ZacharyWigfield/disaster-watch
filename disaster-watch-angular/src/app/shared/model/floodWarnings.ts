@@ -8,4 +8,6 @@ export type FloodWarnings = {
     urgency: string,
     effective: Date,
     expires: Date
+    lat: number,
+    long: number
 }

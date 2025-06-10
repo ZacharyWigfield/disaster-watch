@@ -20,7 +20,7 @@
                         <ng-container *ngFor="let area of warning.areaDesc">
                             <ul>
                                 <li>
-                                    <a routerLink="/details">{{area}}</a>
+                                    <a [routerLink]="['/details', warning.id]">{{area}}</a>
                                 </li>
                             </ul>
                         </ng-container>
