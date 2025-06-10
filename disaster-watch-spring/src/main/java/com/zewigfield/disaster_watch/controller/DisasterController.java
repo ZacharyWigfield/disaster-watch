@@ -20,6 +20,11 @@ public class DisasterController {
         this.floodAlertService = floodAlertService;
     }
 
+    @GetMapping("/floods/all")
+    public List<FloodAlertDTO> getAllFloods() {
+        return floodAlertService.getAllFloodAlerts();
+    }
+
     // returns flood and flash flood warnings of extreme and severe severity and observed and likely certainty
     @GetMapping("/floods/warnings")
     public List<FloodAlertDTO> getFloodWarnings(
@@ -31,4 +36,5 @@ public class DisasterController {
     ) {
         return floodAlertService.getFilteredFloodAlerts(eventType, startDate, endDate, searchLocation, radius);
     }
+
 }

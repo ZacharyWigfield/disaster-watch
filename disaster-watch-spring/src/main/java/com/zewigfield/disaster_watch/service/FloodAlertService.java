@@ -78,6 +78,10 @@ public class FloodAlertService {
         }
     }
 
+    public List<FloodAlertDTO> getAllFloodAlerts() {
+        return this.repository.findAllAsDTO();
+    }
+
     public List<FloodAlertDTO> getFilteredFloodAlerts(List<String> eventType, Instant startDate, Instant endDate, String searchLocation, int radius) {
         GeocodingService.Coordinates userCoords = geocodingService.geocode(searchLocation);
         List <FloodAlertDTO> alerts = this.repository.findByParams(eventType, startDate, endDate);

@@ -17,6 +17,9 @@ public interface FloodAlertRepository extends JpaRepository<FloodAlertEntity, St
     @Query("DELETE FROM FloodAlertEntity f WHERE f.effective < :cutoff")
     int deleteByEffectiveBefore(Instant cutoff);
 
+    @Query("SELECT new com.zewigfield.disaster_watch.model.DTO.FloodAlertDTO(f) FROM FloodAlertEntity f")
+    List<FloodAlertDTO> findAllAsDTO();
+
     @Query(value = """
             SELECT new com.zewigfield.disaster_watch.model.DTO.FloodAlertDTO(f)
             FROM FloodAlertEntity f
