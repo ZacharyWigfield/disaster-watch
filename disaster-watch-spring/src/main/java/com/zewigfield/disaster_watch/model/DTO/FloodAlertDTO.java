@@ -1,9 +1,8 @@
 package com.zewigfield.disaster_watch.model.DTO;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zewigfield.disaster_watch.model.entity.FloodAlertEntity;
-import org.locationtech.jts.geom.Geometry;
-
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Polygon;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
@@ -21,6 +20,7 @@ public class FloodAlertDTO {
     private final Instant expires;
     private final Double latitude;
     private final Double longitude;
+    private final Map<String, Object> floodAreaPolygon;
 
     public FloodAlertDTO(FloodAlertEntity alert) {
         this.id = alert.getId();
@@ -34,6 +34,7 @@ public class FloodAlertDTO {
         this.expires = alert.getExpires();
         this.latitude = alert.getLatitude();
         this.longitude = alert.getLongitude();
+        this.floodAreaPolygon = convertToGeoJson(alert.getFloodArea());
     }
 
     private List<String> parseAreaDesc(String areaDesc) {
@@ -82,6 +83,28 @@ public class FloodAlertDTO {
 
     public Double getLongitude() {
         return longitude;
+    }
+
+    public Map<String, Object> getPolygonGeoJson() {
+        return floodAreaPolygon;
+    }
+
+    private Map<String, Object> convertToGeoJson(Polygon polygon) {
+        if (polygon == null) return null;
+
+        Map<String, Object> geoJson = new java.util.HashMap<>();
+        geoJson.put("type", "Polygon");
+
+        List<List<double[]>> coordinates = new java.util.ArrayList<>();
+        List<double[]> outerRing = new java.util.ArrayList<>();
+
+        for (Coordinate coord : polygon.getExteriorRing().getCoordinates()) {
+            outerRing.add(new double[]{coord.x, coord.y});
+        }
+
+        coordinates.add(outerRing);
+        geoJson.put("coordinates", coordinates);
+        return geoJson;
     }
 
 }
