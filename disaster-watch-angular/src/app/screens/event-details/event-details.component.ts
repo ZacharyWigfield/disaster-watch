@@ -3,12 +3,13 @@ import { SearchService } from '../../services/search.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FloodEvent } from '../../shared/model/floodWarnings';
 import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 import { Subscription } from 'rxjs';
 
 @Component({
   standalone: true,
   selector: 'app-event-details',
-  imports: [],
+  imports: [ToastModule],
   providers: [MessageService],
   templateUrl: './event-details.component.html',
   styleUrl: './event-details.component.scss'
@@ -42,7 +43,7 @@ export class EventDetailsComponent implements OnInit, OnDestroy {
   }
 
   private loadEventById(id: number) {
-    this.searchService.getFloodEventByID(this.id).subscribe({
+    this.searchService.getFloodEventByID(id).subscribe({
       next: (data) => {
         this.floodEvent = data
         console.log(this.floodEvent)
@@ -54,7 +55,7 @@ export class EventDetailsComponent implements OnInit, OnDestroy {
             summary: 'Event not found',
             detail: 'No flood event exists with this ID.'
           });
-          this.router.navigate(['/']); // or homepage
+          this.router.navigate(['/']);
         } else {
           this.messageService.add({
             severity: 'error',
