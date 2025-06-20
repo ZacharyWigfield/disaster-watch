@@ -2,7 +2,10 @@ package com.zewigfield.disaster_watch.controller;
 
 import com.zewigfield.disaster_watch.model.DTO.FloodAlertDTO;
 import com.zewigfield.disaster_watch.service.FloodAlertService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
@@ -35,6 +38,16 @@ public class DisasterController {
             @RequestParam List<String> eventType
     ) {
         return floodAlertService.getFilteredFloodAlerts(eventType, startDate, endDate, searchLocation, radius);
+    }
+
+    @GetMapping("floods/warnings/{id}")
+    public ResponseEntity<FloodAlertDTO> getEventByID(@PathVariable Long id) {
+        try {
+            FloodAlertDTO dto = floodAlertService.getEventByID(id);
+            return ResponseEntity.ok(dto);
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
 }

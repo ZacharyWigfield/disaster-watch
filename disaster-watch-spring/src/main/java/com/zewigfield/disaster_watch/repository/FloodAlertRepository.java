@@ -20,18 +20,25 @@ public interface FloodAlertRepository extends JpaRepository<FloodAlertEntity, St
     int deleteByEffectiveBefore(Instant cutoff);
 
     @Query("SELECT new com.zewigfield.disaster_watch.model.DTO.FloodAlertDTO(f) FROM FloodAlertEntity f")
-    List<FloodAlertDTO> findAllAsDTO();
+    List<FloodAlertDTO> findAllFloodEventAsDTO();
 
-    Optional<FloodAlertEntity> findByExternalId(String externalId);
+    @Query("""
+            SELECT new com.zewigfield.disaster_watch.model.DTO.FloodAlertDTO(f)
+            FROM FloodAlertEntity f
+            WHERE f.id = :id
+            """)
+    Optional<FloodAlertDTO> findFloodEventByID(@Param("id") Long id);
 
-    @Query(value = """
+    Optional<FloodAlertEntity> findFloodEventByExternalId(String externalId);
+
+    @Query("""
             SELECT new com.zewigfield.disaster_watch.model.DTO.FloodAlertDTO(f)
             FROM FloodAlertEntity f
             WHERE f.event IN :eventTypes
             AND f.effective BETWEEN :start AND :end
             """)
-    List<FloodAlertDTO> findByParams(
-            @Param("eventTypes") List <String> eventTypes,
+    List<FloodAlertDTO> findFloodEventByParams(
+            @Param("eventTypes") List<String> eventTypes,
             @Param("start") Instant startDate,
             @Param("end") Instant endDate
     );

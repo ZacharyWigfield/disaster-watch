@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.zewigfield.disaster_watch.model.DTO.FloodAlertDTO;
 import com.zewigfield.disaster_watch.model.entity.FloodAlertEntity;
 import com.zewigfield.disaster_watch.repository.FloodAlertRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.locationtech.jts.geom.*;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -15,7 +16,6 @@ import org.springframework.web.client.RestTemplate;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class FloodAlertService {
@@ -36,7 +36,7 @@ public class FloodAlertService {
 
         for (JsonNode feature : root.get("features")) {
             FloodAlertEntity alert = mapJsonToAlertEntity(feature);
-            if (repository.findByExternalId(alert.getExternalId()).isEmpty()) {
+            if (repository.findFloodEventByExternalId(alert.getExternalId()).isEmpty()) {
                 repository.save(alert);
             }
         }
@@ -107,12 +107,17 @@ public class FloodAlertService {
     }
 
     public List<FloodAlertDTO> getAllFloodAlerts() {
-        return this.repository.findAllAsDTO();
+        return this.repository.findAllFloodEventAsDTO();
+    }
+
+    public FloodAlertDTO getEventByID(Long id) {
+        return this.repository.findFloodEventByID(id)
+                .orElseThrow(() -> new EntityNotFoundException("FloodAlert with ID " + id + " not found"));
     }
 
     public List<FloodAlertDTO> getFilteredFloodAlerts(List<String> eventType, Instant startDate, Instant endDate, String searchLocation, int radius) {
         GeocodingService.Coordinates userCoords = geocodingService.geocode(searchLocation);
-        List<FloodAlertDTO> alerts = this.repository.findByParams(eventType, startDate, endDate);
+        List<FloodAlertDTO> alerts = this.repository.findFloodEventByParams(eventType, startDate, endDate);
 
         return alerts.stream()
                 .filter(alert -> isWithinRadius(
