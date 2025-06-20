@@ -3,7 +3,7 @@ import { SearchService } from '../../services/search.service';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { Observable, Subject, takeUntil } from 'rxjs';
-import { FloodWarnings } from '../../shared/model/floodWarnings';
+import { FloodEvent } from '../../shared/model/floodWarnings';
 import { RouterLink } from '@angular/router';
 import { LoadingComponent } from '../loading/loading.component';
 
@@ -15,7 +15,7 @@ import { LoadingComponent } from '../loading/loading.component';
   styleUrl: './disaster-list.component.scss'
 })
 export class DisasterListComponent implements OnInit {
-  floodWarningResults$: Observable<FloodWarnings[]>;
+  floodWarningResults$: Observable<FloodEvent[]>;
   searchInitiated = false;
   isLoading = false;
 

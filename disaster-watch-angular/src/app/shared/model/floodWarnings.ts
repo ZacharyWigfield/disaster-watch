@@ -1,4 +1,4 @@
-export type FloodWarnings = {
+export type FloodEvent = {
     id: string,
     areaDesc: string[],
     event: string,

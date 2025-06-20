@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { FloodWarnings } from '../shared/model/floodWarnings';
+import { FloodEvent } from '../shared/model/floodWarnings';
 import { SearchCriteria } from '../shared/model/searchCriteria';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SearchService {
-  private floodWarningsSubject = new BehaviorSubject<FloodWarnings[]>([]);
+  private floodWarningsSubject = new BehaviorSubject<FloodEvent[]>([]);
   floodWarningResults$ = this.floodWarningsSubject.asObservable();
 
   loadingSubject = new BehaviorSubject<boolean>(false);
@@ -18,7 +18,7 @@ export class SearchService {
   constructor(private http: HttpClient) { }
   serverURL = 'http://localhost:8080'
 
-  getFloodWarnings(searchCriteria: SearchCriteria): Observable<FloodWarnings[]> {
+  getFloodWarnings(searchCriteria: SearchCriteria): Observable<FloodEvent[]> {
     const url = `${this.serverURL}/api/disasters/floods/warnings`
     let params = new HttpParams()
       .set('searchLocation', searchCriteria.searchBar)
@@ -31,7 +31,7 @@ export class SearchService {
 
     this.loadingSubject.next(true)
 
-    return this.http.get<FloodWarnings[]>(url, { params }).pipe(
+    return this.http.get<FloodEvent[]>(url, { params }).pipe(
       tap(results => {
         this.floodWarningsSubject.next(results)
         this.loadingSubject.next(false)
@@ -42,4 +42,11 @@ export class SearchService {
       })
     )
   }
+
+  getFloodEventByID(id: number): Observable<FloodEvent>{
+    const url = `${this.serverURL}/api/disasters/floods/warnings/${id}`
+
+    return this.http.get<FloodEvent>(url)
+  }
+  
 }
