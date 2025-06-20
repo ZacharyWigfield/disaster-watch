@@ -9,8 +9,12 @@ SPRING_DATASOURCE_PASSWORD=
 These are used in the application.yaml to connect to the datasource. 
 
 
-The docker commands to build and run the image are as follows:
+build and run docker image:
 
 docker build -t disaster-watch .
 
 docker run --env-file .env -p 8080:8080 disaster-watch
+
+compose docker:
+
+docker-compose up --build
