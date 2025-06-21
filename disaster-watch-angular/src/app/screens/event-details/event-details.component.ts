@@ -1,30 +1,35 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { SearchService } from '../../services/search.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FloodEvent } from '../../shared/model/floodWarnings';
+import { FloodEvent, UserLocation } from '../../shared/model/floodEventWithUserLocation';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { EventMapComponent } from '../../components/event-map/event-map.component';
 
 @Component({
   standalone: true,
   selector: 'app-event-details',
-  imports: [ToastModule],
+  imports: [ToastModule, CommonModule, EventMapComponent],
   providers: [MessageService],
   templateUrl: './event-details.component.html',
   styleUrl: './event-details.component.scss'
 })
 export class EventDetailsComponent implements OnInit, OnDestroy {
   id: number = 0
-  floodEvent: FloodEvent | undefined
-  private routeSubscription!: Subscription;
+  floodEvent!: FloodEvent
+  routeSubscription!: Subscription;
+  userLocation$: Observable<UserLocation>
 
   constructor(
     private searchService: SearchService,
     private route: ActivatedRoute,
     private router: Router,
     private messageService: MessageService
-  ) { }
+  ) {
+    this.userLocation$ = this.searchService.userLocation$
+  }
 
   ngOnInit() {
     this.routeSubscription = this.route.paramMap.subscribe(params => {

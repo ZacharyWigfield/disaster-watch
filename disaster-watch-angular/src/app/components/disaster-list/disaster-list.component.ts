@@ -3,7 +3,7 @@ import { SearchService } from '../../services/search.service';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { Observable, Subject, takeUntil } from 'rxjs';
-import { FloodEvent } from '../../shared/model/floodWarnings';
+import { FloodEvent } from '../../shared/model/floodEventWithUserLocation';
 import { RouterLink } from '@angular/router';
 import { LoadingComponent } from '../loading/loading.component';
 

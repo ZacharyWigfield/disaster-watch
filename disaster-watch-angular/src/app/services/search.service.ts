@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { FloodEvent } from '../shared/model/floodWarnings';
+import { FloodEvent, FloodEventWithUserLocation, UserLocation } from '../shared/model/floodEventWithUserLocation';
 import { SearchCriteria } from '../shared/model/searchCriteria';
 
 @Injectable({
@@ -15,10 +15,13 @@ export class SearchService {
   loadingSubject = new BehaviorSubject<boolean>(false);
   searchLoading$ = this.loadingSubject.asObservable();
 
+  userLocationSubject = new BehaviorSubject<UserLocation>({ lat: 0, long: 0 })
+  userLocation$ = this.userLocationSubject.asObservable()
+
   constructor(private http: HttpClient) { }
   serverURL = 'http://localhost:8080'
 
-  getFloodWarnings(searchCriteria: SearchCriteria): Observable<FloodEvent[]> {
+  getFloodWarnings(searchCriteria: SearchCriteria): Observable<FloodEventWithUserLocation> {
     const url = `${this.serverURL}/api/disasters/floods/warnings`
     let params = new HttpParams()
       .set('searchLocation', searchCriteria.searchBar)
@@ -31,9 +34,10 @@ export class SearchService {
 
     this.loadingSubject.next(true)
 
-    return this.http.get<FloodEvent[]>(url, { params }).pipe(
-      tap(results => {
-        this.floodWarningsSubject.next(results)
+    return this.http.get<FloodEventWithUserLocation>(url, { params }).pipe(
+      tap((results) => {
+        this.floodWarningsSubject.next(results.floodEvents)
+        this.userLocationSubject.next({ lat: results.userLat, long: results.userLong })
         this.loadingSubject.next(false)
       }),
       catchError(error => {
@@ -43,10 +47,10 @@ export class SearchService {
     )
   }
 
-  getFloodEventByID(id: number): Observable<FloodEvent>{
+  getFloodEventByID(id: number): Observable<FloodEvent> {
     const url = `${this.serverURL}/api/disasters/floods/warnings/${id}`
 
     return this.http.get<FloodEvent>(url)
   }
-  
+
 }

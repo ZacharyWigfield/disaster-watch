@@ -8,6 +8,17 @@ export type FloodEvent = {
     urgency: string,
     effective: Date,
     expires: Date
+    latitude: number,
+    longitude: number
+}
+
+export type UserLocation = {
     lat: number,
     long: number
+}
+
+export type FloodEventWithUserLocation = {
+    floodEvents: FloodEvent[],
+    userLat: number,
+    userLong: number
 }
