@@ -1,6 +1,7 @@
 package com.zewigfield.disaster_watch.controller;
 
 import com.zewigfield.disaster_watch.model.DTO.FloodAlertDTO;
+import com.zewigfield.disaster_watch.model.DTO.FloodAlertsWithUserLocationDTO;
 import com.zewigfield.disaster_watch.service.FloodAlertService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -30,7 +31,7 @@ public class DisasterController {
 
     // returns flood and flash flood warnings of extreme and severe severity and observed and likely certainty
     @GetMapping("/floods/warnings")
-    public List<FloodAlertDTO> getFloodWarnings(
+    public FloodAlertsWithUserLocationDTO getFloodWarnings(
             @RequestParam String searchLocation,
             @RequestParam int radius,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant startDate,

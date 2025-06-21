@@ -2,6 +2,7 @@ package com.zewigfield.disaster_watch.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.zewigfield.disaster_watch.model.DTO.FloodAlertDTO;
+import com.zewigfield.disaster_watch.model.DTO.FloodAlertsWithUserLocationDTO;
 import com.zewigfield.disaster_watch.model.entity.FloodAlertEntity;
 import com.zewigfield.disaster_watch.repository.FloodAlertRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -115,17 +116,19 @@ public class FloodAlertService {
                 .orElseThrow(() -> new EntityNotFoundException("FloodAlert with ID " + id + " not found"));
     }
 
-    public List<FloodAlertDTO> getFilteredFloodAlerts(List<String> eventType, Instant startDate, Instant endDate, String searchLocation, int radius) {
+    public FloodAlertsWithUserLocationDTO getFilteredFloodAlerts(List<String> eventType, Instant startDate, Instant endDate, String searchLocation, int radius) {
         GeocodingService.Coordinates userCoords = geocodingService.geocode(searchLocation);
         List<FloodAlertDTO> alerts = this.repository.findFloodEventByParams(eventType, startDate, endDate);
 
-        return alerts.stream()
+        List<FloodAlertDTO> FilteredAlerts = alerts.stream()
                 .filter(alert -> isWithinRadius(
                         userCoords.latitude(),
                         userCoords.longitude(),
                         alert.getLatitude(),
                         alert.getLongitude(),
                         radius)).toList();
+
+        return new FloodAlertsWithUserLocationDTO(FilteredAlerts, userCoords.latitude(), userCoords.longitude());
     }
 
     public boolean isWithinRadius(double lat1, double lon1, double lat2, double lon2, double userRadius) {
