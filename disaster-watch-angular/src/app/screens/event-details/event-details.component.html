@@ -2,9 +2,9 @@
     <p-toast position="top-right" />
     <div id="map-container">
         <ng-container *ngIf="userLocation$ | async as userLocation">
-            <ng-container *ngIf="floodEvent?.latitude && floodEvent?.longitude">
-                <app-event-map [eventLat]="floodEvent.latitude!" [eventLong]="floodEvent.longitude!"
-                    [userLat]="userLocation.lat!" [userLong]="userLocation.long!">
+            <ng-container *ngIf="floodEvent as event">
+                <app-event-map [eventLat]="event.latitude" [eventLong]="event.longitude"
+                    [userLat]="userLocation.lat" [userLong]="userLocation.long">
                 </app-event-map>
             </ng-container>
         </ng-container>

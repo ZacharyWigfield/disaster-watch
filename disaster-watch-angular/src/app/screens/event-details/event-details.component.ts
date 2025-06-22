@@ -18,8 +18,8 @@ import { EventMapComponent } from '../../components/event-map/event-map.componen
 })
 export class EventDetailsComponent implements OnInit, OnDestroy {
   id: number = 0
-  floodEvent!: FloodEvent
-  routeSubscription!: Subscription;
+  floodEvent: FloodEvent | undefined;
+  routeSubscription: Subscription = new Subscription;
   userLocation$: Observable<UserLocation>
   floodEvents$: Observable<FloodEvent[]>
 
