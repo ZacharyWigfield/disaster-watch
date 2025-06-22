@@ -1,5 +1,5 @@
 export type FloodEvent = {
-    id: string,
+    id: number,
     areaDesc: string[],
     event: string,
     description: string,

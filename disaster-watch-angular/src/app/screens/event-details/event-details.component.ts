@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FloodEvent, UserLocation } from '../../shared/model/floodEventWithUserLocation';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, take, tap } from 'rxjs';
 import { EventMapComponent } from '../../components/event-map/event-map.component';
 
 @Component({
@@ -21,6 +21,7 @@ export class EventDetailsComponent implements OnInit, OnDestroy {
   floodEvent!: FloodEvent
   routeSubscription!: Subscription;
   userLocation$: Observable<UserLocation>
+  floodEvents$: Observable<FloodEvent[]>
 
   constructor(
     private searchService: SearchService,
@@ -29,6 +30,7 @@ export class EventDetailsComponent implements OnInit, OnDestroy {
     private messageService: MessageService
   ) {
     this.userLocation$ = this.searchService.userLocation$
+    this.floodEvents$ = this.searchService.floodWarningResults$
   }
 
   ngOnInit() {
@@ -36,7 +38,17 @@ export class EventDetailsComponent implements OnInit, OnDestroy {
       const idParam = params.get('id')
       if (idParam && !isNaN(+idParam)) {
         this.id = +idParam
-        this.loadEventById(this.id);
+        this.floodEvents$.pipe(
+          take(1),
+          tap(floodEvents => {
+            const found = floodEvents.find(event => event.id === this.id);
+            if (found) {
+              this.floodEvent = found;
+            } else {
+              this.loadEventById(this.id);
+            }
+          })
+        ).subscribe();
       } else {
         this.router.navigate(['/'])
       }
@@ -51,7 +63,6 @@ export class EventDetailsComponent implements OnInit, OnDestroy {
     this.searchService.getFloodEventByID(id).subscribe({
       next: (data) => {
         this.floodEvent = data
-        console.log(this.floodEvent)
       },
       error: (err) => {
         if (err.status === 404) {
