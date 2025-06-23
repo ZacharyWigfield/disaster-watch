@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, finalize, tap } from 'rxjs/operators';
 import { FloodEvent, FloodEventWithUserLocation, UserLocation } from '../shared/model/floodEventWithUserLocation';
 import { SearchCriteria } from '../shared/model/searchCriteria';
 
@@ -9,14 +9,14 @@ import { SearchCriteria } from '../shared/model/searchCriteria';
   providedIn: 'root'
 })
 export class SearchService {
-  private floodWarningsSubject = new BehaviorSubject<FloodEvent[]>([]);
-  floodWarningResults$ = this.floodWarningsSubject.asObservable();
+  private readonly floodWarningsSubject = new BehaviorSubject<FloodEvent[]>([]);
+  readonly floodWarningResults$ = this.floodWarningsSubject.asObservable();
 
-  loadingSubject = new BehaviorSubject<boolean>(false);
-  searchLoading$ = this.loadingSubject.asObservable();
+  private readonly loadingSubject = new BehaviorSubject<boolean>(false);
+  readonly searchLoading$ = this.loadingSubject.asObservable();
 
-  userLocationSubject = new BehaviorSubject<UserLocation>({ lat: 0, long: 0 })
-  userLocation$ = this.userLocationSubject.asObservable()
+  private readonly userLocationSubject = new BehaviorSubject<UserLocation>({ lat: 0, long: 0 })
+  readonly userLocation$ = this.userLocationSubject.asObservable()
 
   constructor(private http: HttpClient) { }
   serverURL = 'http://localhost:8080'
@@ -32,16 +32,14 @@ export class SearchService {
       params = params.append('eventType', type);
     }
 
-    this.loadingSubject.next(true)
-
     return this.http.get<FloodEventWithUserLocation>(url, { params }).pipe(
+      tap(() => this.loadingSubject.next(true)),
       tap((results) => {
         this.floodWarningsSubject.next(results.floodEvents)
         this.userLocationSubject.next({ lat: results.userLat, long: results.userLong })
-        this.loadingSubject.next(false)
       }),
+      finalize(() => this.loadingSubject.next(false)),
       catchError(error => {
-        this.loadingSubject.next(false);
         return throwError(() => error)
       })
     )

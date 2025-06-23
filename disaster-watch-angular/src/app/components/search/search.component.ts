@@ -44,7 +44,6 @@ export class SearchComponent implements OnInit {
 
     this.searchService.getFloodWarnings(formData).subscribe({
       error: (err) => {
-        this.searchService.loadingSubject.next(false)
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
