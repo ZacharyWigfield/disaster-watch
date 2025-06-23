@@ -1,67 +1,67 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SearchService } from '../../services/search.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FloodEvent, UserLocation } from '../../shared/model/floodEventWithUserLocation';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-import { Observable, Subscription, take, tap } from 'rxjs';
 import { EventMapComponent } from '../../components/event-map/event-map.component';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-event-details',
   imports: [ToastModule, CommonModule, EventMapComponent],
   providers: [MessageService],
   templateUrl: './event-details.component.html',
-  styleUrl: './event-details.component.scss'
+  styleUrl: './event-details.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EventDetailsComponent implements OnInit, OnDestroy {
-  id: number = 0
-  floodEvent: FloodEvent | undefined;
-  routeSubscription: Subscription = new Subscription;
-  userLocation$: Observable<UserLocation>
-  floodEvents$: Observable<FloodEvent[]>
+export class EventDetailsComponent {
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private searchService = inject(SearchService);
+  private messageService = inject(MessageService);
 
-  constructor(
-    private searchService: SearchService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private messageService: MessageService
-  ) {
-    this.userLocation$ = this.searchService.userLocation$
-    this.floodEvents$ = this.searchService.floodWarningResults$
-  }
+  readonly userLocation = toSignal<UserLocation | undefined>(this.searchService.userLocation$);
+  readonly floodEvents = toSignal<FloodEvent[] | undefined>(this.searchService.floodWarningResults$);
 
-  ngOnInit() {
-    this.routeSubscription = this.route.paramMap.subscribe(params => {
-      const idParam = params.get('id')
-      if (idParam && !isNaN(+idParam)) {
-        this.id = +idParam
-        this.floodEvents$.pipe(
-          take(1),
-          tap(floodEvents => {
-            const found = floodEvents.find(event => event.id === this.id);
-            if (found) {
-              this.floodEvent = found;
-            } else {
-              this.loadEventById(this.id);
-            }
-          })
-        ).subscribe();
-      } else {
-        this.router.navigate(['/'])
+  private readonly paramMapSignal = toSignal(this.route.paramMap);
+
+  readonly floodEvent = signal<FloodEvent | undefined>(undefined);
+
+  readonly id = computed(() => {
+    const idParam = this.paramMapSignal()?.get('id');
+    return idParam && !isNaN(+idParam) ? +idParam : null;
+  });
+
+  constructor() {
+    effect(() => {
+      const id = this.id();
+      const floodEvents = this.floodEvents();
+
+      if (id === null) {
+        this.router.navigate(['/']);
+        return;
       }
-    })
-  }
 
-  ngOnDestroy() {
-    this.routeSubscription.unsubscribe();
+      if (floodEvents) {
+        const found = floodEvents.find(event => event.id === id);
+        if (found) {
+          this.floodEvent.set(found);
+        } else {
+          this.loadEventById(id);
+        }
+      } else {
+        this.loadEventById(id);
+      }
+
+    });
   }
 
   private loadEventById(id: number) {
     this.searchService.getFloodEventByID(id).subscribe({
       next: (data) => {
-        this.floodEvent = data
+        this.floodEvent.set(data);
       },
       error: (err) => {
         if (err.status === 404) {
