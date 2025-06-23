@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DatePicker } from 'primeng/datepicker';
 import { MultiSelect } from 'primeng/multiselect';
@@ -19,29 +19,34 @@ import { SearchCriteria, SearchCriteriaFormGroup } from '../../shared/model/sear
     ButtonModule, InputTextModule, FloatLabel, ToastModule],
   providers: [MessageService],
   templateUrl: './search.component.html',
-  styleUrl: './search.component.scss'
+  styleUrl: './search.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class SearchComponent implements OnInit {
-  DISASTER_TYPES = DISASTER_TYPES
-  today = new Date();
-  oneWeekAgo = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000);
-  radiusPickValue = 100;
-  searchForm: SearchCriteriaFormGroup = new FormGroup({
+export class SearchComponent {
+  private searchService = inject(SearchService);
+  private messageService = inject(MessageService);
+
+  readonly DISASTER_TYPES = DISASTER_TYPES
+  readonly today = new Date();
+  readonly oneWeekAgo = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000);
+  readonly radiusPickValue = 100;
+
+  readonly searchForm: SearchCriteriaFormGroup = new FormGroup({
     searchBar: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
     radiusPick: new FormControl<number>(this.radiusPickValue, { nonNullable: true }),
     disasterType: new FormControl<string[]>(DISASTER_TYPES, { nonNullable: true }),
     dateRange: new FormControl<[Date, Date]>([this.oneWeekAgo, this.today], { nonNullable: true })
   });
 
-  constructor(
-    private searchService: SearchService,
-    private messageService: MessageService
-  ) { }
+  readonly radiusLabel = computed(() => `Radius: ${this.searchForm.get('radiusPick')?.value || 0} miles`);
+
+  constructor() { }
 
   handleSearch() {
-    const formData: SearchCriteria = this.searchForm.getRawValue();
+    if (!this.searchForm.valid) return;
 
+    const formData: SearchCriteria = this.searchForm.getRawValue();
     this.searchService.getFloodWarnings(formData).subscribe({
       error: (err) => {
         this.messageService.add({
@@ -51,9 +56,6 @@ export class SearchComponent implements OnInit {
         })
       }
     });
-  }
-
-  ngOnInit(): void {
   }
 
 }

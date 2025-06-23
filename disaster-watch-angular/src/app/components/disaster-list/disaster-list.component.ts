@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { SearchService } from '../../services/search.service';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
@@ -11,7 +11,8 @@ import { LoadingComponent } from '../loading/loading.component';
   selector: 'app-disaster-list',
   imports: [TableModule, CommonModule, RouterLink, LoadingComponent],
   templateUrl: './disaster-list.component.html',
-  styleUrl: './disaster-list.component.scss'
+  styleUrl: './disaster-list.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DisasterListComponent implements OnInit {
   floodWarningResults$: Observable<FloodEvent[]>;

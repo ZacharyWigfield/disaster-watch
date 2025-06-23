@@ -1,11 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import * as L from 'leaflet';
 
 @Component({
   selector: 'app-event-map',
   imports: [],
   templateUrl: './event-map.component.html',
-  styleUrl: './event-map.component.scss'
+  styleUrl: './event-map.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventMapComponent implements OnInit {
   @Input() eventLat!: number;
