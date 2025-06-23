@@ -40,7 +40,7 @@
         </div>
 
         <div class="disaster-list-content">
-            <app-event-map [floodEvents]="floodEventResults()!" [userLat]="userLocation().lat"
+            <app-event-map [mapId]="'disaster-list'" [floodEvents]="floodEventResults()!" [userLat]="userLocation().lat"
                 [userLong]="userLocation().long"></app-event-map>
         </div>
     </div>

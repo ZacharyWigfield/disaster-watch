@@ -1,10 +1,13 @@
-<div class="page-content">
+<div class="event-details-container">
     <p-toast position="top-right" />
+    @if (floodEvent()) {
+    <div class="event-details-content">
 
-    <div id="map-container">
-        @if (floodEvent()) {
-        <app-event-map [floodEvents]="[floodEvent()!]" [userLat]="userLocation()?.lat"
-            [userLong]="userLocation()?.long" />
-        }
     </div>
+
+    <div id="map-container" class="event-details-content">
+        <app-event-map [mapId]="'event-details'" [floodEvents]="[floodEvent()!]" [userLat]="userLocation()?.lat"
+            [userLong]="userLocation()?.long" />
+    </div>
+    }
 </div>

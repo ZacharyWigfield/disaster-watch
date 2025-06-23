@@ -10,6 +10,7 @@ import { FloodEvent } from '../../shared/model/floodEventWithUserLocation';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventMapComponent {
+  readonly mapId = input.required<string>();
   readonly floodEvents = input<FloodEvent[]>([]);
   readonly userLat = input<number | undefined>(undefined);
   readonly userLong = input<number | undefined>(undefined);
@@ -28,23 +29,25 @@ export class EventMapComponent {
 
   constructor() {
     effect(() => {
+      const id = this.mapId()
       const events = this.floodEvents();
       const lat = this.userLat();
       const long = this.userLong();
 
-      // Only re-init map if there's at least one event
-      if (events.length) {
-        this.initMap(events, lat, long);
-      }
+      if (!events.length) return;
+
+      queueMicrotask(() => {
+        this.initMap(id, events, lat, long);
+      });
     });
   }
 
-  private initMap(events: FloodEvent[], lat?: number, long?: number): void {
+  private initMap(id: string, events: FloodEvent[], lat?: number, long?: number): void {
     if (this.map) {
       this.map.remove();
     }
 
-    this.map = L.map('map', {
+    this.map = L.map(id, {
       center: lat && long ? [lat, long] : [events[0].latitude, events[0].longitude],
       zoom: 7
     });
@@ -72,6 +75,10 @@ export class EventMapComponent {
         ], { color: 'blue' }).addTo(this.map);
       }
     }
+  }
+
+  ngAfterViewInit() {
+
   }
 
 }
