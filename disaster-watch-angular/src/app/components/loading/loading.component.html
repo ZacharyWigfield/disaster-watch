@@ -1,3 +1,5 @@
-<div class="loading-container" *ngIf="loading">
+@if (loading()){
+<div class="loading-container">
     <p-progress-spinner ariaLabel="loading" />
 </div>
+}

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
@@ -9,6 +9,5 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
   styleUrl: './loading.component.scss'
 })
 export class LoadingComponent {
-  @Input() loading = false
-
+  readonly loading = input<boolean>(false);
 }
