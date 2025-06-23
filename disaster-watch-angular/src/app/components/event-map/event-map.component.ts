@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, input } from '@angular/core';
 import * as L from 'leaflet';
+import { FloodEvent } from '../../shared/model/floodEventWithUserLocation';
 
 @Component({
   selector: 'app-event-map',
@@ -8,11 +9,10 @@ import * as L from 'leaflet';
   styleUrl: './event-map.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EventMapComponent implements OnInit {
-  @Input() eventLat!: number;
-  @Input() eventLong!: number;
-  @Input() userLat!: number;
-  @Input() userLong!: number;
+export class EventMapComponent {
+  readonly floodEvents = input<FloodEvent[]>([]);
+  readonly userLat = input<number | undefined>(undefined);
+  readonly userLong = input<number | undefined>(undefined);
 
   private customIcon = L.icon({
     iconUrl: 'assets/leaflet/marker-icon.png',
@@ -26,35 +26,51 @@ export class EventMapComponent implements OnInit {
 
   private map!: L.Map
 
-  ngOnInit(): void {
-    this.initMap();
+  constructor() {
+    effect(() => {
+      const events = this.floodEvents();
+      const lat = this.userLat();
+      const long = this.userLong();
+
+      // Only re-init map if there's at least one event
+      if (events.length) {
+        this.initMap(events, lat, long);
+      }
+    });
   }
 
-  private initMap(): void {
+  private initMap(events: FloodEvent[], lat?: number, long?: number): void {
+    if (this.map) {
+      this.map.remove();
+    }
+
     this.map = L.map('map', {
-      center: [this.eventLat, this.eventLong],
-      zoom: 8
+      center: lat && long ? [lat, long] : [events[0].latitude, events[0].longitude],
+      zoom: 7
     });
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors'
     }).addTo(this.map);
 
-    L.marker([this.eventLat, this.eventLong], { icon: this.customIcon })
-      .addTo(this.map)
-      .bindPopup('Event Location')
-      .openPopup();
+    for (const event of events) {
+      L.marker([event.latitude, event.longitude], { icon: this.customIcon })
+        .addTo(this.map)
+        .bindPopup('Event Location')
+        .openPopup();
+    }
 
-    if (this.userLat && this.userLong) {
-      L.marker([this.userLat, this.userLong], { icon: this.customIcon })
+    if (lat !== undefined && long !== undefined) {
+      L.marker([lat, long], { icon: this.customIcon })
         .addTo(this.map)
         .bindPopup('Your Location');
 
-      // Optional: Draw a line between user and event
-      L.polyline([
-        [this.userLat, this.userLong],
-        [this.eventLat, this.eventLong]
-      ], { color: 'blue' }).addTo(this.map);
+      if (this.floodEvents().length === 1) {
+        L.polyline([
+          [lat, long],
+          [this.floodEvents()[0].latitude, this.floodEvents()[0].longitude]
+        ], { color: 'blue' }).addTo(this.map);
+      }
     }
   }
 

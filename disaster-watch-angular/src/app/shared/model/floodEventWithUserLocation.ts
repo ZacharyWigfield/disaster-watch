@@ -13,8 +13,8 @@ export type FloodEvent = {
 }
 
 export type UserLocation = {
-    lat: number,
-    long: number
+    lat: number | undefined,
+    long: number | undefined
 }
 
 export type FloodEventWithUserLocation = {

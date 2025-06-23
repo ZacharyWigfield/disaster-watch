@@ -2,9 +2,9 @@
     <p-toast position="top-right" />
 
     <div id="map-container">
-        @if (userLocation() && floodEvent()) {
-        <app-event-map [eventLat]="floodEvent()!.latitude" [eventLong]="floodEvent()!.longitude"
-            [userLat]="userLocation()!.lat" [userLong]="userLocation()!.long" />
+        @if (floodEvent()) {
+        <app-event-map [floodEvents]="[floodEvent()!]" [userLat]="userLocation()?.lat"
+            [userLong]="userLocation()?.long" />
         }
     </div>
 </div>

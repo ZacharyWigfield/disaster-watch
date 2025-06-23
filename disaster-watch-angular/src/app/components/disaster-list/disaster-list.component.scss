@@ -1,0 +1,14 @@
+#disaster-list-container{
+    height: 100%
+}
+
+.content-container {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+
+.disaster-list-content {
+    width: 50%;
+    height: 100vh;
+}

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
 import { FloodEvent, FloodEventWithUserLocation, UserLocation } from '../shared/model/floodEventWithUserLocation';
 import { SearchCriteria } from '../shared/model/searchCriteria';
@@ -15,7 +15,7 @@ export class SearchService {
   private readonly loadingSubject = new BehaviorSubject<boolean>(false);
   readonly searchLoading$ = this.loadingSubject.asObservable();
 
-  private readonly userLocationSubject = new BehaviorSubject<UserLocation>({ lat: 0, long: 0 })
+  private readonly userLocationSubject = new BehaviorSubject<UserLocation>({ lat: undefined, long: undefined })
   readonly userLocation$ = this.userLocationSubject.asObservable()
 
   constructor(private http: HttpClient) { }
