@@ -2,7 +2,7 @@
     <p-toast position="top-right" />
     @if (floodEvent()) {
     <div class="event-details-content">
-
+        <div>{{floodEvent()!.description}}</div>
     </div>
 
     <div id="map-container" class="event-details-content">
