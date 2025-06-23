@@ -32,8 +32,9 @@ export class SearchService {
       params = params.append('eventType', type);
     }
 
+    this.loadingSubject.next(true)
+
     return this.http.get<FloodEventWithUserLocation>(url, { params }).pipe(
-      tap(() => this.loadingSubject.next(true)),
       tap((results) => {
         this.floodWarningsSubject.next(results.floodEvents)
         this.userLocationSubject.next({ lat: results.userLat, long: results.userLong })

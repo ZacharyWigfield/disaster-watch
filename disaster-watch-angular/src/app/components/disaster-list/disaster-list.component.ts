@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { SearchService } from '../../services/search.service';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
-import { Observable, Subject, takeUntil } from 'rxjs';
-import { FloodEvent } from '../../shared/model/floodEventWithUserLocation';
 import { RouterLink } from '@angular/router';
 import { LoadingComponent } from '../loading/loading.component';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { FloodEvent } from '../../shared/model/floodEventWithUserLocation';
 
 @Component({
   selector: 'app-disaster-list',
@@ -14,34 +14,12 @@ import { LoadingComponent } from '../loading/loading.component';
   styleUrl: './disaster-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DisasterListComponent implements OnInit {
-  floodWarningResults$: Observable<FloodEvent[]>;
-  searchInitiated = false;
-  isLoading = false;
+export class DisasterListComponent {
+  private readonly searchService = inject(SearchService)
+  readonly floodEventResults = toSignal(this.searchService.floodWarningResults$, { initialValue: [] as FloodEvent[] })
+  readonly isLoading = toSignal(this.searchService.searchLoading$, { initialValue: false })
 
-  private destroy$ = new Subject<void>();
+  constructor() { }
 
-  constructor(private searchService: SearchService) {
-    this.floodWarningResults$ = this.searchService.floodWarningResults$;
-   }
-
-  ngOnInit() {
-    this.searchService.searchLoading$
-    .pipe(takeUntil(this.destroy$))
-    .subscribe(loading => this.isLoading = loading);
-
-    this.floodWarningResults$
-    .pipe(takeUntil(this.destroy$))
-    .subscribe(results => {
-      if (results && results.length > 0) {
-        this.searchInitiated = true;
-      }
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
 
 }

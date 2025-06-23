@@ -15,7 +15,7 @@
         <div class="searchCriteria">
             <div class="criteria">
                 <p-floatlabel>
-                    <label for="radiusPickSlider">Radius: {{searchForm.get('radiusPick')?.value || 0}} miles</label>
+                    <label for="radiusPickSlider">{{ radiusLabel() }}</label>
                 </p-floatlabel>
                 <p-slider id="radiusPickSlider" formControlName="radiusPick" min="10" max="200" step="10" />
 

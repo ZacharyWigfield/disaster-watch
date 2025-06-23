@@ -1,39 +1,38 @@
-<app-loading [loading]="isLoading"></app-loading>
-<ng-container *ngIf="searchInitiated">
-    <ng-container *ngIf="floodWarningResults$ | async as floodWarningResults">
-        <p-table [value]="floodWarningResults" [paginator]="true" [rows]="25" showGridlines stripedRows>
-            <ng-template #header>
-                <tr>
-                    <th>Area</th>
-                    <th>Event</th>
-                    <th style="width:50%">Description</th>
-                    <th>Certainty</th>
-                    <th>Severity</th>
-                    <th>Urgency</th>
-                    <th>Effective</th>
-                    <th>Expires</th>
-                </tr>
-            </ng-template>
-            <ng-template #body let-warning>
-                <tr>
-                    <td>
-                        <ng-container *ngFor="let area of warning.areaDesc">
-                            <ul>
-                                <li>
-                                    <a [routerLink]="['/details', warning.id]">{{area}}</a>
-                                </li>
-                            </ul>
-                        </ng-container>
-                    </td>
-                    <td>{{ warning.event }}</td>
-                    <td>{{ warning.description }}</td>
-                    <td>{{ warning.certainty }}</td>
-                    <td>{{ warning.severity }}</td>
-                    <td>{{ warning.urgency }}</td>
-                    <td>{{ warning.effective | date:'short' }}</td>
-                    <td>{{ warning.expires | date:'short' }}</td>
-                </tr>
-            </ng-template>
-        </p-table>
-    </ng-container>
-</ng-container>
+<app-loading [loading]="isLoading()"></app-loading> 
+
+@if (floodEventResults().length > 0) {
+<p-table [value]="floodEventResults()" [paginator]="true" [rows]="25" showGridlines stripedRows>
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Area</th>
+            <th>Event</th>
+            <th style="width:50%">Description</th>
+            <th>Certainty</th>
+            <th>Severity</th>
+            <th>Urgency</th>
+            <th>Effective</th>
+            <th>Expires</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-warning>
+        <tr>
+            <td>
+                <ul>
+                    @for (area of warning.areaDesc; track area) {
+                    <li>
+                        <a [routerLink]="['/details', warning.id]">{{area}}</a>
+                    </li>
+                    }
+                </ul>
+            </td>
+            <td>{{ warning.event }}</td>
+            <td>{{ warning.description }}</td>
+            <td>{{ warning.certainty }}</td>
+            <td>{{ warning.severity }}</td>
+            <td>{{ warning.urgency }}</td>
+            <td>{{ warning.effective | date:'short' }}</td>
+            <td>{{ warning.expires | date:'short' }}</td>
+        </tr>
+    </ng-template>
+</p-table>
+}
