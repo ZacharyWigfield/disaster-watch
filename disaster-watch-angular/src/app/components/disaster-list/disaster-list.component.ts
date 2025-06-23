@@ -8,7 +8,6 @@ import { RouterLink } from '@angular/router';
 import { LoadingComponent } from '../loading/loading.component';
 
 @Component({
-  standalone: true,
   selector: 'app-disaster-list',
   imports: [TableModule, CommonModule, RouterLink, LoadingComponent],
   templateUrl: './disaster-list.component.html',

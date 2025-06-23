@@ -14,7 +14,6 @@ import { SearchCriteria, SearchCriteriaFormGroup } from '../../shared/model/sear
 
 
 @Component({
-  standalone: true,
   selector: 'app-search',
   imports: [ReactiveFormsModule, Slider, DatePicker, MultiSelect,
     ButtonModule, InputTextModule, FloatLabel, ToastModule],

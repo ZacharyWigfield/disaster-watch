@@ -9,7 +9,6 @@ import { Observable, Subscription, take, tap } from 'rxjs';
 import { EventMapComponent } from '../../components/event-map/event-map.component';
 
 @Component({
-  standalone: true,
   selector: 'app-event-details',
   imports: [ToastModule, CommonModule, EventMapComponent],
   providers: [MessageService],

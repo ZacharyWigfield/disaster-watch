@@ -3,7 +3,6 @@ import { Component, Input } from '@angular/core';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
-  standalone: true,
   selector: 'app-loading',
   imports: [CommonModule, ProgressSpinnerModule],
   templateUrl: './loading.component.html',
