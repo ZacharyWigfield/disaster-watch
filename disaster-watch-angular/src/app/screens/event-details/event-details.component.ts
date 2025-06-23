@@ -11,7 +11,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'app-event-details',
   imports: [ToastModule, CommonModule, EventMapComponent],
-  providers: [MessageService],
   templateUrl: './event-details.component.html',
   styleUrl: './event-details.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

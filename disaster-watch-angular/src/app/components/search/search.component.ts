@@ -17,7 +17,6 @@ import { SearchCriteria, SearchCriteriaFormGroup } from '../../shared/model/sear
   selector: 'app-search',
   imports: [ReactiveFormsModule, Slider, DatePicker, MultiSelect,
     ButtonModule, InputTextModule, FloatLabel, ToastModule],
-  providers: [MessageService],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -48,14 +47,7 @@ export class SearchComponent {
 
     const formData: SearchCriteria = this.searchForm.getRawValue();
     this.searchService.getFloodWarnings(formData).subscribe({
-      error: (err) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: err?.error?.message || 'Failed to fetch flood warnings'
-        })
-      }
-    });
+    })
   }
 
 }

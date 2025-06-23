@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, finalize, tap } from 'rxjs/operators';
+import { finalize, tap } from 'rxjs/operators';
 import { FloodEvent, FloodEventWithUserLocation, UserLocation } from '../shared/model/floodEventWithUserLocation';
 import { SearchCriteria } from '../shared/model/searchCriteria';
 
@@ -39,9 +39,6 @@ export class SearchService {
         this.userLocationSubject.next({ lat: results.userLat, long: results.userLong })
       }),
       finalize(() => this.loadingSubject.next(false)),
-      catchError(error => {
-        return throwError(() => error)
-      })
     )
   }
 
