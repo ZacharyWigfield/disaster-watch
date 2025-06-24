@@ -9,7 +9,13 @@ export type FloodEvent = {
     effective: Date,
     expires: Date
     latitude: number,
-    longitude: number
+    longitude: number,
+    polygonGeoJson: GeoJsonPolygon
+}
+
+export interface GeoJsonPolygon {
+    type: 'Polygon';
+    coordinates: [number, number][][]; 
 }
 
 export type UserLocation = {
