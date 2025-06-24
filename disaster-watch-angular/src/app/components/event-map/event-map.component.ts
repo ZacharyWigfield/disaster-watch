@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, effect, input } from '@angular/core';
 import * as L from 'leaflet';
-import { FloodEvent } from '../../shared/model/floodEventWithUserLocation';
+import { FloodEvent, GeoJsonPolygon } from '../../shared/model/floodEventWithUserLocation';
 
 @Component({
   selector: 'app-event-map',
@@ -61,12 +61,15 @@ export class EventMapComponent {
         .addTo(this.map)
         .bindPopup('Event Location')
         .openPopup();
+
+      this.renderPolygons(event.polygonGeoJson);
     }
 
     if (lat !== undefined && long !== undefined) {
       L.marker([lat, long], { icon: this.customIcon })
         .addTo(this.map)
-        .bindPopup('Your Location');
+        .bindPopup('Your Location')
+        .openPopup();
 
       if (this.floodEvents().length === 1) {
         L.polyline([
@@ -77,8 +80,20 @@ export class EventMapComponent {
     }
   }
 
-  ngAfterViewInit() {
+  private renderPolygons(polygon: GeoJsonPolygon) {
+    if (!polygon || polygon.type !== 'Polygon') return;
 
+    // data comes in [lng, lat], but leaflet expects [lat, lng]
+    const latlngs = polygon.coordinates.map(ring =>
+      ring.map(([lng, lat]) => L.latLng(lat, lng))
+    );
+
+    const polygonLayer = L.polygon(latlngs, {
+      color: 'blue',
+      fillOpacity: 0.1
+    }).addTo(this.map);
+
+    this.map.fitBounds(polygonLayer.getBounds());
   }
 
 }
