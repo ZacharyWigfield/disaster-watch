@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './screens/home/home.component';
-import { EventDetailsComponent } from './screens/event-details/event-details.component';
 
 export const routes: Routes = [
     {
@@ -9,6 +8,6 @@ export const routes: Routes = [
     },
     {
         path: 'details/:id',
-        component: EventDetailsComponent,
+        loadComponent: () => import('./screens/event-details/event-details.component').then(m => m.EventDetailsComponent)
     },
 ];
