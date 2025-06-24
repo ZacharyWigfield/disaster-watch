@@ -6,6 +6,7 @@
             <p-table [value]="floodEventResults()" [paginator]="true" [rows]="25" showGridlines stripedRows>
                 <ng-template pTemplate="header">
                     <tr>
+                        <th>Event ID</th>
                         <th>Area</th>
                         <th>Event</th>
                         <th>Certainty</th>
@@ -17,6 +18,7 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-warning>
                     <tr>
+                        <td>{{warning.id}}</td>
                         <td>
                             <ul>
                                 @for (area of warning.areaDesc; track area) {
