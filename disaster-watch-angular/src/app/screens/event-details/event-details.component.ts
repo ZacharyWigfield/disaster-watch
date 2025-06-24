@@ -21,8 +21,8 @@ export class EventDetailsComponent {
   private searchService = inject(SearchService);
   private messageService = inject(MessageService);
 
-  readonly userLocation = toSignal<UserLocation | undefined>(this.searchService.userLocation$);
-  readonly floodEvents = toSignal<FloodEvent[] | undefined>(this.searchService.floodWarningResults$);
+  readonly userLocation = toSignal<UserLocation | undefined>(this.searchService.userLocationSubject);
+  readonly floodEvents = toSignal<FloodEvent[] | undefined>(this.searchService.floodWarningsSubject);
 
   private readonly paramMapSignal = toSignal(this.route.paramMap);
 

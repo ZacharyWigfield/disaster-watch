@@ -1,12 +1,12 @@
 <div class="searchContainer">
     <p-toast position="top-right" />
-    <form class="searchForm" [formGroup]="searchForm">
+    <form class="searchForm" [formGroup]="form">
         <div class="searchBar">
             <input id="locationSearch" type="text" placeholder="Enter an address, city, or zip code" pInputText
                 formControlName="searchBar" />
             <div>
                 <button pButton pRipple id="searchButton" class="searchButton" icon="pi pi-search" severity="success"
-                    (click)="handleSearch()" [disabled]="!searchForm.valid">
+                    (click)="handleSearch()" [disabled]="!form.valid">
                     Search
                 </button>
             </div>
@@ -24,7 +24,7 @@
             <div class="criteria">
                 <p-floatlabel>
                     <label for="disasterType">Disaster Type: </label>
-                    <p-multiSelect #disasterSelect id="disasterType" [options]="DISASTER_TYPES"
+                    <p-multiSelect #disasterSelect id="disasterType" [options]="disasterTypes"
                         formControlName="disasterType" filter="false">
                     </p-multiSelect>
                 </p-floatlabel>

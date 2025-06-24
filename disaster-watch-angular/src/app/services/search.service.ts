@@ -1,25 +1,41 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { finalize, tap } from 'rxjs/operators';
 import { FloodEvent, FloodEventWithUserLocation, UserLocation } from '../shared/model/floodEventWithUserLocation';
-import { SearchCriteria } from '../shared/model/searchCriteria';
+import { SearchCriteria, SearchCriteriaFormGroup } from '../shared/model/searchCriteria';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { DISASTER_TYPES } from '../shared/constants/disaster-types.constant';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SearchService {
-  private readonly floodWarningsSubject = new BehaviorSubject<FloodEvent[]>([]);
-  readonly floodWarningResults$ = this.floodWarningsSubject.asObservable();
+  private readonly serverURL = 'http://localhost:8080'
 
-  private readonly loadingSubject = new BehaviorSubject<boolean>(false);
-  readonly searchLoading$ = this.loadingSubject.asObservable();
+  readonly floodWarningsSubject = new BehaviorSubject<FloodEvent[]>([]);
+  readonly userLocationSubject = new BehaviorSubject<UserLocation>({ lat: undefined, long: undefined })
+  readonly isLoading = signal(false);
 
-  private readonly userLocationSubject = new BehaviorSubject<UserLocation>({ lat: undefined, long: undefined })
-  readonly userLocation$ = this.userLocationSubject.asObservable()
+  private readonly today = new Date();
+  private readonly oneWeekAgo = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000);
+  private readonly _form: SearchCriteriaFormGroup = new FormGroup({
+    searchBar: new FormControl<string>('', { nonNullable: true, validators: [Validators.required] }),
+    radiusPick: new FormControl<number>(100, { nonNullable: true }),
+    disasterType: new FormControl<string[]>(DISASTER_TYPES, { nonNullable: true }),
+    dateRange: new FormControl<[Date, Date]>([this.oneWeekAgo, this.today], { nonNullable: true })
+  });
 
-  constructor(private http: HttpClient) { }
-  serverURL = 'http://localhost:8080'
+  private readonly radiusPickSignal = signal(this._form.controls.radiusPick.value);
+
+  // Update signal whenever form control changes
+  constructor(private http: HttpClient) {
+    this._form.controls.radiusPick.valueChanges.subscribe(val => this.radiusPickSignal.set(val));
+  }
+
+  get searchForm(): SearchCriteriaFormGroup {
+    return this._form;
+  }
 
   getFloodWarnings(searchCriteria: SearchCriteria): Observable<FloodEventWithUserLocation> {
     const url = `${this.serverURL}/api/disasters/floods/warnings`
@@ -32,14 +48,14 @@ export class SearchService {
       params = params.append('eventType', type);
     }
 
-    this.loadingSubject.next(true)
+    this.isLoading.set(true)
 
     return this.http.get<FloodEventWithUserLocation>(url, { params }).pipe(
       tap((results) => {
         this.floodWarningsSubject.next(results.floodEvents)
         this.userLocationSubject.next({ lat: results.userLat, long: results.userLong })
       }),
-      finalize(() => this.loadingSubject.next(false)),
+      finalize(() => this.isLoading.set(false)),
     )
   }
 
@@ -48,5 +64,7 @@ export class SearchService {
 
     return this.http.get<FloodEvent>(url)
   }
+
+
 
 }

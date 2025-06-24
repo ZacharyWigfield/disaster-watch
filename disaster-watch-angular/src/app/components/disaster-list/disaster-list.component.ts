@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Signal } from '@angular/core';
 import { SearchService } from '../../services/search.service';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
@@ -17,11 +17,10 @@ import { EventMapComponent } from '../event-map/event-map.component';
 })
 export class DisasterListComponent {
   private readonly searchService = inject(SearchService)
-  readonly floodEventResults = toSignal(this.searchService.floodWarningResults$, { initialValue: [] as FloodEvent[] })
-  readonly isLoading = toSignal(this.searchService.searchLoading$, { initialValue: false })
-  readonly userLocation = toSignal(this.searchService.userLocation$, { initialValue: { lat: undefined, long: undefined } as UserLocation })
+  readonly floodEventResults: Signal<FloodEvent[]> = toSignal(this.searchService.floodWarningsSubject, { initialValue: [] })
+  readonly isLoading: Signal<boolean> = this.searchService.isLoading
+  readonly userLocation: Signal<UserLocation> = toSignal(this.searchService.userLocationSubject, { initialValue: { lat: undefined, long: undefined } })
 
   constructor() { }
-
 
 }
