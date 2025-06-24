@@ -37,7 +37,7 @@ export class SearchService {
     return this._form;
   }
 
-  getFloodWarnings(searchCriteria: SearchCriteria): Observable<FloodEventWithUserLocation> {
+  getFloodWarnings(searchCriteria: SearchCriteria): void {
     const url = `${this.serverURL}/api/disasters/floods/warnings`
     let params = new HttpParams()
       .set('searchLocation', searchCriteria.searchBar)
@@ -50,21 +50,19 @@ export class SearchService {
 
     this.isLoading.set(true)
 
-    return this.http.get<FloodEventWithUserLocation>(url, { params }).pipe(
+    this.http.get<FloodEventWithUserLocation>(url, { params }).pipe(
       tap((results) => {
         this.floodWarningsSubject.next(results.floodEvents)
         this.userLocationSubject.next({ lat: results.userLat, long: results.userLong })
       }),
       finalize(() => this.isLoading.set(false)),
-    )
+    ).subscribe()
   }
 
   getFloodEventByID(id: number): Observable<FloodEvent> {
     const url = `${this.serverURL}/api/disasters/floods/warnings/${id}`
-
     return this.http.get<FloodEvent>(url)
   }
-
 
 
 }

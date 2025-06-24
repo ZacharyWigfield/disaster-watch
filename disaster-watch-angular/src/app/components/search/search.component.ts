@@ -38,7 +38,7 @@ export class SearchComponent {
     if (!this.form.valid) return;
 
     const formData: SearchCriteria = this.form.getRawValue();
-    this.searchService.getFloodWarnings(formData).subscribe()
+    this.searchService.getFloodWarnings(formData)
   }
 
 }
