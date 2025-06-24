@@ -3,6 +3,7 @@ import * as L from 'leaflet';
 import { FloodEvent, GeoJsonPolygon } from '../../shared/model/floodEventWithUserLocation';
 import { SearchService } from '../../services/search.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-event-map',
@@ -14,6 +15,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class EventMapComponent {
   private readonly destroyRef = inject(DestroyRef);
   private readonly searchService = inject(SearchService);
+  private readonly router = inject(Router)
 
   readonly mapId = input.required<string>();
   readonly floodEvents = input<FloodEvent[]>([]);
@@ -70,7 +72,10 @@ export class EventMapComponent {
       L.marker([event.latitude, event.longitude], { icon: this.customIcon })
         .addTo(this.map)
         .bindPopup(`${event.areaDesc[0]}`)
-        .openPopup();
+        .openPopup()
+        .on('click', () => {
+          this.router.navigate([`details/${event.id}`])
+        });
 
       this.renderPolygons(event.polygonGeoJson);
     }
