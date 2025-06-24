@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DatePicker } from 'primeng/datepicker';
 import { MultiSelect } from 'primeng/multiselect';
@@ -10,6 +10,7 @@ import { FloatLabel } from 'primeng/floatlabel';
 import { SearchService } from '../../services/search.service';
 import { DISASTER_TYPES } from '../../shared/constants/disaster-types.constant';
 import { SearchCriteria, SearchCriteriaFormGroup } from '../../shared/model/searchCriteria';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 
 @Component({
@@ -22,6 +23,7 @@ import { SearchCriteria, SearchCriteriaFormGroup } from '../../shared/model/sear
 })
 
 export class SearchComponent {
+  private readonly destroyRef = inject(DestroyRef);
   private searchService = inject(SearchService);
 
   readonly disasterTypes = DISASTER_TYPES
@@ -29,7 +31,7 @@ export class SearchComponent {
   radiusLabel = signal(`${this.searchService.searchForm.controls.radiusPick.value} miles`);
 
   constructor() {
-    this.searchService.searchForm.controls.radiusPick.valueChanges.subscribe(value => {
+    this.searchService.searchForm.controls.radiusPick.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
       this.radiusLabel.set(`${value} miles`);
     })
   }
