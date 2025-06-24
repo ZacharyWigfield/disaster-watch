@@ -26,11 +26,7 @@ export class SearchService {
     dateRange: new FormControl<[Date, Date]>([this.oneWeekAgo, this.today], { nonNullable: true })
   });
 
-  private readonly radiusPickSignal = signal(this._form.controls.radiusPick.value);
-
-  // Update signal whenever form control changes
   constructor(private http: HttpClient) {
-    this._form.controls.radiusPick.valueChanges.subscribe(val => this.radiusPickSignal.set(val));
   }
 
   get searchForm(): SearchCriteriaFormGroup {

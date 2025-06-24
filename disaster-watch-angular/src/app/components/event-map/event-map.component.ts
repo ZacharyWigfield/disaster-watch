@@ -1,6 +1,8 @@
-import { ChangeDetectionStrategy, Component, effect, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, effect, inject, input, signal } from '@angular/core';
 import * as L from 'leaflet';
 import { FloodEvent, GeoJsonPolygon } from '../../shared/model/floodEventWithUserLocation';
+import { SearchService } from '../../services/search.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-event-map',
@@ -10,10 +12,15 @@ import { FloodEvent, GeoJsonPolygon } from '../../shared/model/floodEventWithUse
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EventMapComponent {
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly searchService = inject(SearchService);
+
   readonly mapId = input.required<string>();
   readonly floodEvents = input<FloodEvent[]>([]);
   readonly userLat = input<number | undefined>(undefined);
   readonly userLong = input<number | undefined>(undefined);
+
+  private readonly userLocation = signal(`${this.searchService.searchForm.controls.searchBar.value}`);
 
   private customIcon = L.icon({
     iconUrl: 'assets/leaflet/marker-icon.png',
@@ -28,6 +35,9 @@ export class EventMapComponent {
   private map!: L.Map
 
   constructor() {
+    this.searchService.searchForm.controls.searchBar.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
+      this.userLocation.set(`${value}`);
+    })
     effect(() => {
       const id = this.mapId()
       const events = this.floodEvents();
@@ -59,7 +69,7 @@ export class EventMapComponent {
     for (const event of events) {
       L.marker([event.latitude, event.longitude], { icon: this.customIcon })
         .addTo(this.map)
-        .bindPopup('Event Location')
+        .bindPopup(`${event.areaDesc[0]}`)
         .openPopup();
 
       this.renderPolygons(event.polygonGeoJson);
@@ -68,7 +78,7 @@ export class EventMapComponent {
     if (lat !== undefined && long !== undefined) {
       L.marker([lat, long], { icon: this.customIcon })
         .addTo(this.map)
-        .bindPopup('Your Location')
+        .bindPopup(this.userLocation())
         .openPopup();
 
       if (this.floodEvents().length === 1) {
@@ -88,12 +98,11 @@ export class EventMapComponent {
       ring.map(([lng, lat]) => L.latLng(lat, lng))
     );
 
-    const polygonLayer = L.polygon(latlngs, {
+    L.polygon(latlngs, {
       color: 'blue',
       fillOpacity: 0.1
     }).addTo(this.map);
 
-    this.map.fitBounds(polygonLayer.getBounds());
   }
 
 }

@@ -24,11 +24,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 export class SearchComponent {
   private readonly destroyRef = inject(DestroyRef);
-  private searchService = inject(SearchService);
+  private readonly searchService = inject(SearchService);
 
   readonly disasterTypes = DISASTER_TYPES
   readonly form: SearchCriteriaFormGroup = this.searchService.searchForm;
-  radiusLabel = signal(`${this.searchService.searchForm.controls.radiusPick.value} miles`);
+  readonly radiusLabel = signal(`${this.searchService.searchForm.controls.radiusPick.value} miles`);
 
   constructor() {
     this.searchService.searchForm.controls.radiusPick.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
