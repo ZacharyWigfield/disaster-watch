@@ -1,3 +1,9 @@
+export type FloodEventWithUserLocation = {
+    floodEvents: FloodEvent[],
+    userLat: number,
+    userLong: number
+}
+
 export type FloodEvent = {
     id: number,
     areaDesc: string[],
@@ -6,8 +12,8 @@ export type FloodEvent = {
     severity: string,
     certainty: string
     urgency: string,
-    effective: Date,
-    expires: Date
+    effective: string,
+    expires: string,
     latitude: number,
     longitude: number,
     polygonGeoJson: GeoJsonPolygon
@@ -15,7 +21,7 @@ export type FloodEvent = {
 
 export interface GeoJsonPolygon {
     type: 'Polygon';
-    coordinates: [number, number][][]; 
+    coordinates: [number, number][][];
 }
 
 export type UserLocation = {
@@ -23,8 +29,3 @@ export type UserLocation = {
     long: number | undefined
 }
 
-export type FloodEventWithUserLocation = {
-    floodEvents: FloodEvent[],
-    userLat: number,
-    userLong: number
-}

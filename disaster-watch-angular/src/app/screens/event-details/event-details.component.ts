@@ -21,11 +21,14 @@ export class EventDetailsComponent {
   private searchService = inject(SearchService);
   private messageService = inject(MessageService);
 
+  private readonly now: Date = new Date();
+  daysSinceEvent = signal<number>(0);
+  hoursSinceEvent = signal<number>(0);
+  isEventStillOccuring = false;
+
   readonly userLocation = toSignal<UserLocation | undefined>(this.searchService.userLocationSubject);
   readonly floodEvents = toSignal<FloodEvent[] | undefined>(this.searchService.floodWarningsSubject);
-
   private readonly paramMapSignal = toSignal(this.route.paramMap);
-
   readonly floodEvent = signal<FloodEvent | undefined>(undefined);
 
   readonly id = computed(() => {
@@ -46,7 +49,7 @@ export class EventDetailsComponent {
       if (floodEvents) {
         const found = floodEvents.find(event => event.id === id);
         if (found) {
-          this.floodEvent.set(found);
+          this.loadEventByPreviousSearchData(found);
         } else {
           this.loadEventById(id);
         }
@@ -57,10 +60,16 @@ export class EventDetailsComponent {
     });
   }
 
+  private loadEventByPreviousSearchData(foundEvent: FloodEvent) {
+    this.floodEvent.set(foundEvent);
+    this.calculateTimeSinceEvent(foundEvent);
+  }
+
   private loadEventById(id: number) {
     this.searchService.getFloodEventByID(id).subscribe({
       next: (data) => {
         this.floodEvent.set(data);
+        this.calculateTimeSinceEvent(data);
       },
       error: (err) => {
         if (err.status === 404) {
@@ -79,6 +88,17 @@ export class EventDetailsComponent {
         }
       }
     })
+  }
+
+  private calculateTimeSinceEvent(event: FloodEvent) {
+    const effectiveDate = new Date(event.effective)
+    const hours = (this.now.getTime() - effectiveDate.getTime()) / (1000 * 60 * 60);
+    this.hoursSinceEvent.set(hours);
+
+    if (hours > 24) {
+      this.daysSinceEvent.set(Math.floor(hours / 24));
+      this.hoursSinceEvent.set(Math.round(hours % 24));
+    }
   }
 
 }

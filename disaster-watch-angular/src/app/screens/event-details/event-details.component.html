@@ -3,6 +3,14 @@
     @if (floodEvent()) {
     <div class="event-details-content">
         <div>{{floodEvent()!.description}}</div>
+
+        <div>
+            <h1>Time since event:</h1>
+            @if(daysSinceEvent()){
+            <span>{{daysSinceEvent()}} days</span>
+            }
+            <span> {{hoursSinceEvent()}} hours</span>
+        </div>
     </div>
 
     <div id="map-container" class="event-details-content">
