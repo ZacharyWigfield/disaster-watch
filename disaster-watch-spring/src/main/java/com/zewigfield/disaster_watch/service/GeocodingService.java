@@ -1,5 +1,6 @@
 package com.zewigfield.disaster_watch.service;
 
+import com.zewigfield.disaster_watch.model.record.Coordinates;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -8,8 +9,23 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class GeocodingService {
 
     private final RestTemplate restTemplate = new RestTemplate();
+    private final GeocodingCacheService cache;
 
-    public Coordinates geocode (String query){
+    public GeocodingService(GeocodingCacheService cache) {
+        this.cache = cache;
+    }
+
+    public Coordinates geocodeFromCache(String query) {
+        if (cache.contains(query)) {
+            return cache.get(query);
+        }
+
+        Coordinates coords = geocodeWithExternalApi(query);
+        cache.put(query, coords);
+        return coords;
+    }
+
+    private Coordinates geocodeWithExternalApi(String query) {
         String url = UriComponentsBuilder.fromHttpUrl("https://nominatim.openstreetmap.org/search")
                 .queryParam("q", query)
                 .queryParam("format", "json")
@@ -19,7 +35,7 @@ public class GeocodingService {
 
         GeocodeResponse[] response = restTemplate.getForObject(url, GeocodeResponse[].class);
 
-        if (response != null && response.length > 0){
+        if (response != null && response.length > 0) {
             double lat = Double.parseDouble(response[0].lat);
             double lon = Double.parseDouble(response[0].lon);
             return new Coordinates(lat, lon);
@@ -33,5 +49,4 @@ public class GeocodingService {
         public String lon;
     }
 
-    public record Coordinates(double latitude, double longitude) {}
 }

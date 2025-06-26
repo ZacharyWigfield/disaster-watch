@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.zewigfield.disaster_watch.model.DTO.FloodAlertDTO;
 import com.zewigfield.disaster_watch.model.DTO.FloodAlertsWithUserLocationDTO;
 import com.zewigfield.disaster_watch.model.entity.FloodAlertEntity;
+import com.zewigfield.disaster_watch.model.record.Coordinates;
 import com.zewigfield.disaster_watch.repository.FloodAlertRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.locationtech.jts.geom.*;
@@ -117,7 +118,7 @@ public class FloodAlertService {
     }
 
     public FloodAlertsWithUserLocationDTO getFilteredFloodAlerts(List<String> eventType, Instant startDate, Instant endDate, String searchLocation, int userRadius) {
-        GeocodingService.Coordinates userCoords = geocodingService.geocode(searchLocation);
+        Coordinates userCoords = geocodingService.geocodeFromCache(searchLocation);
         List<FloodAlertEntity> alerts = this.repository.findFloodEventByParams(eventType, startDate, endDate);
 
         List<FloodAlertDTO> FilteredAlerts = alerts.stream()
