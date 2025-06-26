@@ -3,6 +3,12 @@
     @if (floodEvent()) {
     <div class="event-details-content">
         <div>{{floodEvent()!.description}}</div>
+         <div>{{floodEvent()!.event}}</div>
+        <div>{{floodEvent()!.severity}}</div>
+        <div>{{floodEvent()!.certainty}}</div>
+        <div>{{floodEvent()!.urgency}}</div>
+        <div>{{floodEvent()!.effective | date:'short'}}</div>
+        <div>{{floodEvent()!.expires | date:'short'}}</div>
 
         <div>
             <h1>Time since event:</h1>
@@ -11,6 +17,13 @@
             }
             <span> {{hoursSinceEvent()}} hours</span>
         </div>
+
+        @if(floodEvent()?.userToEventDistance){
+        <div>
+            <h1> Distance between you and event:</h1>
+            <span>{{floodEvent()?.userToEventDistance | number:'1.0-0' }} miles</span>
+        </div>
+        }
     </div>
 
     <div id="map-container" class="event-details-content">

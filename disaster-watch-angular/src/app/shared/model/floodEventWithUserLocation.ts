@@ -16,6 +16,7 @@ export type FloodEvent = {
     expires: string,
     latitude: number,
     longitude: number,
+    userToEventDistance: number,
     polygonGeoJson: GeoJsonPolygon
 }
 

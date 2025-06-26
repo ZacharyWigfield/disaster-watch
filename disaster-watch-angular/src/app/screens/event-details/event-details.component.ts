@@ -93,7 +93,7 @@ export class EventDetailsComponent {
   private calculateTimeSinceEvent(event: FloodEvent) {
     const effectiveDate = new Date(event.effective)
     const hours = (this.now.getTime() - effectiveDate.getTime()) / (1000 * 60 * 60);
-    this.hoursSinceEvent.set(hours);
+    this.hoursSinceEvent.set(Math.round(hours));
 
     if (hours > 24) {
       this.daysSinceEvent.set(Math.floor(hours / 24));
