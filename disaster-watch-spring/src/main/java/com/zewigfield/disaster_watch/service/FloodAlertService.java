@@ -116,30 +116,35 @@ public class FloodAlertService {
                 .orElseThrow(() -> new EntityNotFoundException("FloodAlert with ID " + id + " not found"));
     }
 
-    public FloodAlertsWithUserLocationDTO getFilteredFloodAlerts(List<String> eventType, Instant startDate, Instant endDate, String searchLocation, int radius) {
+    public FloodAlertsWithUserLocationDTO getFilteredFloodAlerts(List<String> eventType, Instant startDate, Instant endDate, String searchLocation, int userRadius) {
         GeocodingService.Coordinates userCoords = geocodingService.geocode(searchLocation);
-        List<FloodAlertDTO> alerts = this.repository.findFloodEventByParams(eventType, startDate, endDate);
+        List<FloodAlertEntity> alerts = this.repository.findFloodEventByParams(eventType, startDate, endDate);
 
         List<FloodAlertDTO> FilteredAlerts = alerts.stream()
-                .filter(alert -> isWithinRadius(
-                        userCoords.latitude(),
-                        userCoords.longitude(),
-                        alert.getLatitude(),
-                        alert.getLongitude(),
-                        radius)).toList();
+                .map(alert -> {
+                    double distance = calculateUserToEventDistance(
+                            userCoords.latitude(),
+                            userCoords.longitude(),
+                            alert.getLatitude(),
+                            alert.getLongitude()
+                    );
+                    return new FloodAlertDTO(alert, distance);
+                })
+                .filter(alert -> alert.getUserToEventDistance() <= userRadius
+                )
+                .toList();
 
         return new FloodAlertsWithUserLocationDTO(FilteredAlerts, userCoords.latitude(), userCoords.longitude());
     }
 
-    public boolean isWithinRadius(double lat1, double lon1, double lat2, double lon2, double userRadius) {
+    public double calculateUserToEventDistance(double userLat, double userLon, double eventLat, double eventLon) {
         final double EARTH_RADIUS_MILES = 3958.8;
-        double dLat = Math.toRadians(lat2 - lat1);
-        double dLon = Math.toRadians(lon2 - lon1);
+        double dLat = Math.toRadians(eventLat - userLat);
+        double dLon = Math.toRadians(eventLon - userLon);
         double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
-                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                + Math.cos(Math.toRadians(userLat)) * Math.cos(Math.toRadians(eventLat))
                 * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return EARTH_RADIUS_MILES * c <= userRadius;
+        return EARTH_RADIUS_MILES * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     }
 
 }

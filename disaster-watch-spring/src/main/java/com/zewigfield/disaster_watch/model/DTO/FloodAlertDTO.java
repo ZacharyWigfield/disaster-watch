@@ -3,6 +3,7 @@ package com.zewigfield.disaster_watch.model.DTO;
 import com.zewigfield.disaster_watch.model.entity.FloodAlertEntity;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Polygon;
+
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
@@ -20,9 +21,10 @@ public class FloodAlertDTO {
     private final Instant expires;
     private final Double latitude;
     private final Double longitude;
+    private final Double userToEventDistance;
     private final Map<String, Object> floodAreaPolygon;
 
-    public FloodAlertDTO(FloodAlertEntity alert) {
+    public FloodAlertDTO(FloodAlertEntity alert, Double distanceUserToEvent) {
         this.id = alert.getId();
         this.areaDesc = parseAreaDesc(alert.getAreaDesc());
         this.event = alert.getEvent();
@@ -34,7 +36,13 @@ public class FloodAlertDTO {
         this.expires = alert.getExpires();
         this.latitude = alert.getLatitude();
         this.longitude = alert.getLongitude();
+        this.userToEventDistance = distanceUserToEvent;
         this.floodAreaPolygon = convertToGeoJson(alert.getFloodArea());
+    }
+
+    // secondary constructor for when a user location isn't passed by endpoint
+    public FloodAlertDTO(FloodAlertEntity alert) {
+        this(alert, null);  // fallback to the main constructor
     }
 
     private List<String> parseAreaDesc(String areaDesc) {
@@ -83,6 +91,10 @@ public class FloodAlertDTO {
 
     public Double getLongitude() {
         return longitude;
+    }
+
+    public Double getUserToEventDistance() {
+        return userToEventDistance;
     }
 
     public Map<String, Object> getPolygonGeoJson() {

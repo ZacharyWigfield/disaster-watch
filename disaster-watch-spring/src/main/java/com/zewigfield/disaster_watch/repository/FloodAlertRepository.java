@@ -32,12 +32,12 @@ public interface FloodAlertRepository extends JpaRepository<FloodAlertEntity, St
     Optional<FloodAlertEntity> findFloodEventByExternalId(String externalId);
 
     @Query("""
-            SELECT new com.zewigfield.disaster_watch.model.DTO.FloodAlertDTO(f)
+            SELECT f
             FROM FloodAlertEntity f
             WHERE f.event IN :eventTypes
             AND f.effective BETWEEN :start AND :end
             """)
-    List<FloodAlertDTO> findFloodEventByParams(
+    List<FloodAlertEntity> findFloodEventByParams(
             @Param("eventTypes") List<String> eventTypes,
             @Param("start") Instant startDate,
             @Param("end") Instant endDate
