@@ -109,11 +109,11 @@ public class FloodAlertService {
     }
 
     public List<FloodAlertDTO> getAllFloodAlerts() {
-        return this.repository.findAllFloodEventAsDTO();
+        return this.repository.findAllFloodEventsAsDto();
     }
 
     public FloodAlertDTO getEventByID(Long id) {
-        return this.repository.findFloodEventByID(id)
+        return this.repository.findFloodEventDtoById(id)
                 .orElseThrow(() -> new EntityNotFoundException("FloodAlert with ID " + id + " not found"));
     }
 
@@ -136,6 +136,10 @@ public class FloodAlertService {
                 .toList();
 
         return new FloodAlertsWithUserLocationDTO(FilteredAlerts, userCoords.latitude(), userCoords.longitude());
+    }
+
+    public List<Integer> getIntersectingEventsByIDWithinLastYear(Long id) {
+        return this.repository.findIntersectingEventsWithinLastYear(id);
     }
 
     public double calculateUserToEventDistance(double userLat, double userLon, double eventLat, double eventLon) {

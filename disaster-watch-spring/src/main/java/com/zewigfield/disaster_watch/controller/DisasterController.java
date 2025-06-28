@@ -30,8 +30,8 @@ public class DisasterController {
     }
 
     // returns flood and flash flood warnings of extreme and severe severity and observed and likely certainty
-    @GetMapping("/floods/warnings")
-    public FloodAlertsWithUserLocationDTO getFloodWarnings(
+    @GetMapping("/floods/events")
+    public FloodAlertsWithUserLocationDTO getFloodEvents(
             @RequestParam String searchLocation,
             @RequestParam int radius,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant startDate,
@@ -41,12 +41,22 @@ public class DisasterController {
         return floodAlertService.getFilteredFloodAlerts(eventType, startDate, endDate, searchLocation, radius);
     }
 
-    @GetMapping("floods/warnings/{id}")
+    @GetMapping("floods/events/{id}")
     public ResponseEntity<FloodAlertDTO> getEventByID(@PathVariable Long id) {
         try {
             FloodAlertDTO dto = floodAlertService.getEventByID(id);
             return ResponseEntity.ok(dto);
         } catch (EntityNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @GetMapping("floods/events/intersecting/{id}")
+    public ResponseEntity<List<Integer>> getIntersectingEventsByIDWithinLastYear(@PathVariable Long id){
+        try {
+            List<Integer> events = floodAlertService.getIntersectingEventsByIDWithinLastYear(id);
+            return ResponseEntity.ok(events);
+        } catch (EntityNotFoundException ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
