@@ -30,6 +30,7 @@ export class EventDetailsComponent {
   readonly floodEvents = toSignal<FloodEvent[] | undefined>(this.searchService.floodWarningsSubject);
   private readonly paramMapSignal = toSignal(this.route.paramMap);
   readonly floodEvent = signal<FloodEvent | undefined>(undefined);
+  readonly intersectingEvents = signal<number[]>([])
 
   readonly id = computed(() => {
     const idParam = this.paramMapSignal()?.get('id');
@@ -56,6 +57,8 @@ export class EventDetailsComponent {
       } else {
         this.loadEventById(id);
       }
+
+      this.getIntersectingEventsWithinYear(id);
 
     });
   }
@@ -86,6 +89,14 @@ export class EventDetailsComponent {
             detail: 'Failed to load event'
           });
         }
+      }
+    })
+  }
+
+  private getIntersectingEventsWithinYear(id: number) {
+    this.searchService.getIntersectingEventsWithinYear(id).subscribe({
+      next: (data) => {
+        this.intersectingEvents.set(data);
       }
     })
   }

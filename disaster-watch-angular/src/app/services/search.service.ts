@@ -34,7 +34,7 @@ export class SearchService {
   }
 
   getFloodWarnings(searchCriteria: SearchCriteria): void {
-    const url = `${this.serverURL}/api/disasters/floods/warnings`
+    const url = `${this.serverURL}/api/disasters/floods/events`
     let params = new HttpParams()
       .set('searchLocation', searchCriteria.searchBar)
       .set('radius', searchCriteria.radiusPick.toString())
@@ -56,9 +56,13 @@ export class SearchService {
   }
 
   getFloodEventByID(id: number): Observable<FloodEvent> {
-    const url = `${this.serverURL}/api/disasters/floods/warnings/${id}`
+    const url = `${this.serverURL}/api/disasters/floods/events/${id}`
     return this.http.get<FloodEvent>(url)
   }
 
+  getIntersectingEventsWithinYear(id: number){
+    const url = `${this.serverURL}/api/disasters/floods/events/intersecting/${id}`
+    return this.http.get<number[]>(url)
+  }
 
 }

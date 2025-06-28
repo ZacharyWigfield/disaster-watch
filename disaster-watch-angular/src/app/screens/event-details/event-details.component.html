@@ -20,9 +20,16 @@
 
         @if(floodEvent()?.userToEventDistance){
         <div>
-            <h1> Distance between you and event:</h1>
+            <h1>Distance between you and event:</h1>
             <span>{{floodEvent()?.userToEventDistance | number:'1.0-0' }} miles</span>
         </div>
+        }
+
+        @if(intersectingEvents()){
+            <div>
+                <h1>Events at this location in the last year:</h1>
+                <span>{{intersectingEvents().length}}</span>
+            </div>
         }
     </div>
 
