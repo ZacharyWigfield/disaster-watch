@@ -43,15 +43,15 @@ public interface FloodAlertRepository extends JpaRepository<FloodAlertEntity, Lo
             @Param("end") Instant endDate
     );
 
-    // uses native SQL over JPQL to make use of PostGIS functions and since we're just returning partial data
+    // uses native SQL over JPQL to make use of PostGIS functions
     @Query(value = """
-            SELECT other.id
-            FROM flood_alerts AS other
+            SELECT id
+            FROM flood_alerts
             WHERE ST_Intersects(
-                  other.flood_area,
+                  flood_area,
                   (SELECT flood_area FROM flood_alerts WHERE id = :eventId)
                   )
-            AND other.effective > NOW() - INTERVAL '1 year'
+            AND effective > NOW() - INTERVAL '1 year'
             """, nativeQuery = true)
-    List<Integer> findIntersectingEventsWithinLastYear(@Param("eventId") Long eventId);
+    List<Long> findIntersectingEventsWithinLastYear(@Param("eventId") Long eventId);
 }

@@ -138,8 +138,13 @@ public class FloodAlertService {
         return new FloodAlertsWithUserLocationDTO(FilteredAlerts, userCoords.latitude(), userCoords.longitude());
     }
 
-    public List<Integer> getIntersectingEventsByIDWithinLastYear(Long eventId) {
-        return this.repository.findIntersectingEventsWithinLastYear(eventId);
+    public List<FloodAlertDTO> getIntersectingEventsByIDWithinLastYear(Long eventId) {
+        List<Long> intersectingIds = this.repository.findIntersectingEventsWithinLastYear(eventId);
+        List<FloodAlertEntity> events = this.repository.findAllById(intersectingIds);
+        return events.stream()
+                .map(FloodAlertDTO::new)
+                .toList();
+
     }
 
     public double calculateUserToEventDistance(double userLat, double userLon, double eventLat, double eventLon) {

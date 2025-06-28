@@ -45,7 +45,7 @@ public class FloodAlertDTO {
         this(alert, null);  // fallback to the main constructor
     }
 
-    private List<String> parseAreaDesc(String areaDesc) {
+    public static List<String> parseAreaDesc(String areaDesc) {
         return Arrays.stream(areaDesc.split(";")).map(String::trim).toList();
     }
 
@@ -101,7 +101,7 @@ public class FloodAlertDTO {
         return floodAreaPolygon;
     }
 
-    private Map<String, Object> convertToGeoJson(Polygon polygon) {
+    public static Map<String, Object> convertToGeoJson(Polygon polygon) {
         if (polygon == null) return null;
 
         Map<String, Object> geoJson = new java.util.HashMap<>();

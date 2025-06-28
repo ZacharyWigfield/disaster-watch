@@ -52,11 +52,11 @@ public class DisasterController {
     }
 
     @GetMapping("floods/events/intersecting/{id}")
-    public ResponseEntity<List<Integer>> getIntersectingEventsByIDWithinLastYear(@PathVariable Long id){
+    public ResponseEntity<List<FloodAlertDTO>> getIntersectingEventsByIDWithinLastYear(@PathVariable Long id) {
         try {
-            List<Integer> events = floodAlertService.getIntersectingEventsByIDWithinLastYear(id);
+            List<FloodAlertDTO> events = floodAlertService.getIntersectingEventsByIDWithinLastYear(id);
             return ResponseEntity.ok(events);
-        } catch (EntityNotFoundException ex){
+        } catch (EntityNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
