@@ -8,10 +8,11 @@ import { ToastModule } from 'primeng/toast';
 import { EventMapComponent } from '../../components/event-map/event-map.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { DisasterTableComponent } from '../../components/disaster-table/disaster-table.component';
+import { CardModule } from 'primeng/card';
 
 @Component({
   selector: 'app-event-details',
-  imports: [ToastModule, CommonModule, EventMapComponent, DisasterTableComponent],
+  imports: [ToastModule, CommonModule, EventMapComponent, DisasterTableComponent, CardModule],
   templateUrl: './event-details.component.html',
   styleUrl: './event-details.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,7 +26,7 @@ export class EventDetailsComponent {
   private readonly now: Date = new Date();
   daysSinceEvent = signal<number>(0);
   hoursSinceEvent = signal<number>(0);
-  isEventStillOccuring = false;
+  isEventStillOccuring = signal<String>("NO");
 
   readonly userLocation = toSignal<UserLocation | undefined>(this.searchService.userLocationSubject);
   readonly floodEvents = toSignal<FloodEvent[] | undefined>(this.searchService.floodWarningsSubject);
@@ -104,12 +105,18 @@ export class EventDetailsComponent {
 
   private calculateTimeSinceEvent(event: FloodEvent) {
     const effectiveDate = new Date(event.effective)
+    const expireDate = new Date(event.expires)
+    const now = new Date()
     const hours = (this.now.getTime() - effectiveDate.getTime()) / (1000 * 60 * 60);
     this.hoursSinceEvent.set(Math.round(hours));
 
     if (hours > 24) {
       this.daysSinceEvent.set(Math.floor(hours / 24));
       this.hoursSinceEvent.set(Math.round(hours % 24));
+    }
+
+    if (expireDate > now){
+      this.isEventStillOccuring.set("YES")
     }
   }
 

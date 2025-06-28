@@ -12,3 +12,9 @@
 #map-container {
     height: 100%;
 }
+
+.event-details-row{
+    display: flex;
+    flex-direction: row;
+     justify-content: space-between;
+}

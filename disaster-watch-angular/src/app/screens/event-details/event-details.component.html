@@ -2,36 +2,81 @@
     <p-toast position="top-right" />
     @if (floodEvent()) {
     <div class="event-details-content">
-        <div>{{floodEvent()!.description}}</div>
-         <div>{{floodEvent()!.event}}</div>
-        <div>{{floodEvent()!.severity}}</div>
-        <div>{{floodEvent()!.certainty}}</div>
-        <div>{{floodEvent()!.urgency}}</div>
-        <div>{{floodEvent()!.effective | date:'short'}}</div>
-        <div>{{floodEvent()!.expires | date:'short'}}</div>
+        <div class="event-details-row">
+            <p-card header="Event ID:">
+                <span>{{id()}}</span>
+            </p-card>
 
-        <div>
-            <h1>Time since event:</h1>
-            @if(daysSinceEvent()){
-            <span>{{daysSinceEvent()}} days</span>
-            }
-            <span> {{hoursSinceEvent()}} hours</span>
-        </div>
+            <p-card header="Time since event:">
+                @if(daysSinceEvent()){
+                <span>{{daysSinceEvent()}} days</span>
+                }
+                <span> {{hoursSinceEvent()}} hours</span>
+            </p-card>
 
-        @if(floodEvent()?.userToEventDistance){
-        <div>
-            <h1>Distance between you and event:</h1>
-            <span>{{floodEvent()?.userToEventDistance | number:'1.0-0' }} miles</span>
-        </div>
-        }
-
-        @if(intersectingEvents()){
-            <div>
-                <h1>{{intersectingEvents().length}} other events at this location in the last year:</h1>
+            <p-card header="Distance between user and event:">
+                @if(floodEvent()?.userToEventDistance){
                 <div>
-                    <app-disaster-table [events]="intersectingEvents()" rows="10"></app-disaster-table>
+                    <span>{{floodEvent()?.userToEventDistance | number:'1.0-0' }} miles</span>
+                </div>
+                }
+                @else {
+                <div>
+                    <span>No user location entered</span>
+                </div>
+                }
+            </p-card>
+
+            <p-card header="Is event still occuring:">
+                <span>{{isEventStillOccuring()}}</span>
+            </p-card>
+        </div>
+
+        <p-card>
+            <div class="event-details-row">
+                <div>
+                    <div>Event Type:</div>
+                    <div>{{floodEvent()!.event}}</div>
+                </div>
+
+                <div>
+                    <div>Severity:</div>
+                    <div>{{floodEvent()!.severity}}</div>
+                </div>
+
+                <div>
+                    <div>Certainty:</div>
+                    <div>{{floodEvent()!.certainty}}</div>
+                </div>
+
+                <div>
+                    <div>Urgency:</div>
+                    <div>{{floodEvent()!.urgency}}</div>
+                </div>
+
+                <div>
+                    <div>Effective:</div>
+                    <div>{{floodEvent()!.effective | date:'short'}}</div>
+                </div>
+
+                <div>
+                    <div>Expires:</div>
+                    <div>{{floodEvent()!.expires | date:'short'}}</div>
                 </div>
             </div>
+        </p-card>
+
+        <p-card>
+            <div>{{floodEvent()!.description}}</div>
+        </p-card>
+
+        @if(intersectingEvents()){
+        <div>
+            <h1>{{intersectingEvents().length}} other events at this location in the last year:</h1>
+            <div>
+                <app-disaster-table [events]="intersectingEvents()" [paginateRows]="5"></app-disaster-table>
+            </div>
+        </div>
         }
     </div>
 
