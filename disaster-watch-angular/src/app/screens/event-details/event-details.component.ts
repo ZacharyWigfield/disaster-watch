@@ -7,10 +7,11 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { EventMapComponent } from '../../components/event-map/event-map.component';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { DisasterTableComponent } from '../../components/disaster-table/disaster-table.component';
 
 @Component({
   selector: 'app-event-details',
-  imports: [ToastModule, CommonModule, EventMapComponent],
+  imports: [ToastModule, CommonModule, EventMapComponent, DisasterTableComponent],
   templateUrl: './event-details.component.html',
   styleUrl: './event-details.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,7 +31,7 @@ export class EventDetailsComponent {
   readonly floodEvents = toSignal<FloodEvent[] | undefined>(this.searchService.floodWarningsSubject);
   private readonly paramMapSignal = toSignal(this.route.paramMap);
   readonly floodEvent = signal<FloodEvent | undefined>(undefined);
-  readonly intersectingEvents = signal<number[]>([])
+  readonly intersectingEvents = signal<FloodEvent[]>([])
 
   readonly id = computed(() => {
     const idParam = this.paramMapSignal()?.get('id');

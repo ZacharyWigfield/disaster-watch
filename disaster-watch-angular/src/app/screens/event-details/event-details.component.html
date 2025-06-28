@@ -27,8 +27,10 @@
 
         @if(intersectingEvents()){
             <div>
-                <h1>Events at this location in the last year:</h1>
-                <span>{{intersectingEvents().length}}</span>
+                <h1>{{intersectingEvents().length}} other events at this location in the last year:</h1>
+                <div>
+                    <app-disaster-table [events]="intersectingEvents()" rows="10"></app-disaster-table>
+                </div>
             </div>
         }
     </div>

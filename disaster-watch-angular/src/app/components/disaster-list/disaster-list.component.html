@@ -3,56 +3,7 @@
     @if (floodEventResults().length > 0) {
     <div class="content-container">
         <div class="disaster-list-content">
-            <p-table [value]="floodEventResults()" [paginator]="true" [rows]="25" >
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th pSortableColumn="id">
-                            Event ID <p-sortIcon field="id" />
-                        </th>
-                        <th pSortableColumn="areaDesc"> 
-                            Area <p-sortIcon field="areaDesc" />
-                        </th>
-                        <th pSortableColumn="event">
-                            Event <p-sortIcon field="event" />
-                        </th>
-                        <th pSortableColumn="certainty">
-                            Certainty <p-sortIcon field="certainty" />
-                        </th>
-                        <th pSortableColumn="severity">
-                            Severity <p-sortIcon field="severity" />
-                        </th>
-                        <th pSortableColumn="urgency">
-                            Urgency <p-sortIcon field="urgency" />
-                        </th>
-                        <th pSortableColumn="effective">
-                            Effective <p-sortIcon field="effective" />
-                        </th>
-                        <th pSortableColumn="expires">
-                            Expires <p-sortIcon field="expires" />
-                        </th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-warning>
-                    <tr>
-                        <td>{{warning.id}}</td>
-                        <td>
-                            <ul>
-                                @for (area of warning.areaDesc; track area) {
-                                <li>
-                                    <a [routerLink]="['/details', warning.id]">{{area}}</a>
-                                </li>
-                                }
-                            </ul>
-                        </td>
-                        <td>{{ warning.event }}</td>
-                        <td>{{ warning.certainty }}</td>
-                        <td>{{ warning.severity }}</td>
-                        <td>{{ warning.urgency }}</td>
-                        <td>{{ warning.effective | date:'short' }}</td>
-                        <td>{{ warning.expires | date:'short' }}</td>
-                    </tr>
-                </ng-template>
-            </p-table>
+            <app-disaster-table [events]="floodEventResults()" rows="25"></app-disaster-table>
         </div>
 
         <div class="disaster-list-content">

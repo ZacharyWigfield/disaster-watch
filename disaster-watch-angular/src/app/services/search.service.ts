@@ -60,9 +60,9 @@ export class SearchService {
     return this.http.get<FloodEvent>(url)
   }
 
-  getIntersectingEventsWithinYear(id: number){
+  getIntersectingEventsWithinYear(id: number): Observable<FloodEvent[]>{
     const url = `${this.serverURL}/api/disasters/floods/events/intersecting/${id}`
-    return this.http.get<number[]>(url)
+    return this.http.get<FloodEvent[]>(url)
   }
 
 }
