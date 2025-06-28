@@ -25,9 +25,9 @@ public interface FloodAlertRepository extends JpaRepository<FloodAlertEntity, Lo
     @Query("""
             SELECT new com.zewigfield.disaster_watch.model.DTO.FloodAlertDTO(f)
             FROM FloodAlertEntity f
-            WHERE f.id = :id
+            WHERE f.id = :eventId
             """)
-    Optional<FloodAlertDTO> findFloodEventDtoById(@Param("id") Long id);
+    Optional<FloodAlertDTO> findFloodEventDtoById(@Param("eventId") Long eventId);
 
     Optional<FloodAlertEntity> findFloodEventByExternalId(String externalId);
 
@@ -53,5 +53,5 @@ public interface FloodAlertRepository extends JpaRepository<FloodAlertEntity, Lo
                   )
             AND other.effective > NOW() - INTERVAL '1 year'
             """, nativeQuery = true)
-    List<Integer> findIntersectingEventsWithinLastYear(@Param("id") Long id);
+    List<Integer> findIntersectingEventsWithinLastYear(@Param("eventId") Long eventId);
 }

@@ -112,9 +112,9 @@ public class FloodAlertService {
         return this.repository.findAllFloodEventsAsDto();
     }
 
-    public FloodAlertDTO getEventByID(Long id) {
-        return this.repository.findFloodEventDtoById(id)
-                .orElseThrow(() -> new EntityNotFoundException("FloodAlert with ID " + id + " not found"));
+    public FloodAlertDTO getEventByID(Long eventId) {
+        return this.repository.findFloodEventDtoById(eventId)
+                .orElseThrow(() -> new EntityNotFoundException("FloodAlert with ID " + eventId + " not found"));
     }
 
     public FloodAlertsWithUserLocationDTO getFilteredFloodAlerts(List<String> eventType, Instant startDate, Instant endDate, String searchLocation, int userRadius) {
@@ -138,8 +138,8 @@ public class FloodAlertService {
         return new FloodAlertsWithUserLocationDTO(FilteredAlerts, userCoords.latitude(), userCoords.longitude());
     }
 
-    public List<Integer> getIntersectingEventsByIDWithinLastYear(Long id) {
-        return this.repository.findIntersectingEventsWithinLastYear(id);
+    public List<Integer> getIntersectingEventsByIDWithinLastYear(Long eventId) {
+        return this.repository.findIntersectingEventsWithinLastYear(eventId);
     }
 
     public double calculateUserToEventDistance(double userLat, double userLon, double eventLat, double eventLon) {

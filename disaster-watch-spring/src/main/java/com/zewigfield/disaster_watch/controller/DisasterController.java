@@ -44,8 +44,8 @@ public class DisasterController {
     @GetMapping("floods/events/{id}")
     public ResponseEntity<FloodAlertDTO> getEventByID(@PathVariable Long id) {
         try {
-            FloodAlertDTO dto = floodAlertService.getEventByID(id);
-            return ResponseEntity.ok(dto);
+            FloodAlertDTO event = floodAlertService.getEventByID(id);
+            return ResponseEntity.ok(event);
         } catch (EntityNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
