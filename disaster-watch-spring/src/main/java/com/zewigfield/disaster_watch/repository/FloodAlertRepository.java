@@ -52,6 +52,7 @@ public interface FloodAlertRepository extends JpaRepository<FloodAlertEntity, Lo
                   (SELECT flood_area FROM flood_alerts WHERE id = :eventId)
                   )
             AND effective > NOW() - INTERVAL '1 year'
+            AND id <> :eventId
             """, nativeQuery = true)
     List<Long> findIntersectingEventsWithinLastYear(@Param("eventId") Long eventId);
 }
