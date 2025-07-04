@@ -1,16 +1,24 @@
 import { TestBed } from '@angular/core/testing';
-
 import { SearchService } from './search.service';
+import { provideHttpClientTesting} from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('SearchService', () => {
-  let service: SearchService;
+  let searchService: SearchService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(SearchService);
+   TestBed.configureTestingModule({
+      providers: [
+        SearchService,
+        provideHttpClient(),         
+        provideHttpClientTesting()  
+      ]
+    });
+
+    searchService = TestBed.inject(SearchService);
   });
 
   it('should be created', () => {
-    expect(service).toBeTruthy();
+    expect(searchService).toBeTruthy();
   });
 });
