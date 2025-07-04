@@ -72,7 +72,7 @@ export class EventDetailsComponent {
 
   private loadEventById(id: number) {
     this.searchService.getFloodEventByID(id).subscribe({
-      next: (data) => {
+      next: (data: FloodEvent) => {
         this.floodEvent.set(data);
         this.calculateTimeSinceEvent(data);
       },
@@ -97,7 +97,7 @@ export class EventDetailsComponent {
 
   private getIntersectingEventsWithinYear(id: number) {
     this.searchService.getIntersectingEventsWithinYear(id).subscribe({
-      next: (data) => {
+      next: (data: FloodEvent[]) => {
         this.intersectingEvents.set(data);
       }
     })
