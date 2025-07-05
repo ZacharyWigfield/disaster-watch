@@ -28,7 +28,6 @@ describe('SearchComponent', () => {
         provideHttpClient(),
         provideHttpClientTesting(),
         MessageService,
-        SearchService
       ]
     })
       .compileComponents();
@@ -52,6 +51,15 @@ describe('SearchComponent', () => {
     const button: HTMLButtonElement = el.querySelector('button[id="searchButton"]')!;
     expect(component.form.valid).toBeFalse();
     expect(button.disabled).toBeTrue();
+  });
+
+  it('should enable search button when form is valid', () => {
+    component.form.setValue(mockCriteria);
+    fixture.detectChanges();
+
+    const button: HTMLButtonElement = el.querySelector('button[id="searchButton"]')!;
+    expect(component.form.valid).toBeTrue();
+    expect(button.disabled).toBeFalse();
   });
 
   it('should expect form to have initial values and form values change when user changes input values', () => {
