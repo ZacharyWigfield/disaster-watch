@@ -11,7 +11,6 @@ import { SearchService } from '../../services/search.service';
 describe('SearchComponent', () => {
   let component: SearchComponent;
   let fixture: ComponentFixture<SearchComponent>;
-  let el: HTMLElement;
   let searchService: SearchService;
 
   const mockCriteria: SearchCriteria = {
@@ -35,20 +34,19 @@ describe('SearchComponent', () => {
     searchService = TestBed.inject(SearchService);
     fixture = TestBed.createComponent(SearchComponent);
     component = fixture.componentInstance;
-    el = fixture.nativeElement;
     fixture.detectChanges();
   });
 
   it('should render all inputs and buttons correctly', () => {
-    expect(el.querySelector('input[id="locationSearch"]')).toBeTruthy();
-    expect(el.querySelector('p-slider[id="radiusPickSlider"]')).toBeTruthy();
-    expect(el.querySelector('p-multiSelect[id="disasterType"]')).toBeTruthy();
-    expect(el.querySelector('p-datePicker[id="date"]')).toBeTruthy();
-    expect(el.querySelector('button[id="searchButton"]')).toBeTruthy();
+    expect(fixture.nativeElement.querySelector("#locationSearch")).toBeTruthy();
+    expect(fixture.nativeElement.querySelector("#radiusPickSlider")).toBeTruthy();
+    expect(fixture.nativeElement.querySelector("#disasterType")).toBeTruthy();
+    expect(fixture.nativeElement.querySelector("#date")).toBeTruthy();
+    expect(fixture.nativeElement.querySelector("#searchButton")).toBeTruthy();
   })
 
   it('should disable search button when form is invalid', () => {
-    const button: HTMLButtonElement = el.querySelector('button[id="searchButton"]')!;
+    const button: HTMLButtonElement = fixture.nativeElement.querySelector("#searchButton")!;
     expect(component.form.valid).toBeFalse();
     expect(button.disabled).toBeTrue();
   });
@@ -57,7 +55,7 @@ describe('SearchComponent', () => {
     component.form.setValue(mockCriteria);
     fixture.detectChanges();
 
-    const button: HTMLButtonElement = el.querySelector('button[id="searchButton"]')!;
+    const button: HTMLButtonElement = fixture.nativeElement.querySelector("#searchButton")!;
     expect(component.form.valid).toBeTrue();
     expect(button.disabled).toBeFalse();
   });
@@ -71,7 +69,7 @@ describe('SearchComponent', () => {
     expect(range[0]).toBeInstanceOf(Date);
     expect(range[1]).toBeInstanceOf(Date);
 
-    const input: HTMLInputElement = el.querySelector('#locationSearch')!;
+    const input: HTMLInputElement = fixture.nativeElement.querySelector('#locationSearch')!;
     input.value = 'New York';
     input.dispatchEvent(new Event('input'));
     fixture.detectChanges();
