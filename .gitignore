@@ -15,6 +15,7 @@ disaster-watch-angular/dist/
 disaster-watch-angular/.angular/
 disaster-watch-angular/.env.local
 disaster-watch-angular/.env.*.local
+disaster-watch-angular/coverage
 
 # Angular cache
 disaster-watch-angular/.cache/
