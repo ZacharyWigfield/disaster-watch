@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { fakeAsync, flushMicrotasks, TestBed, tick } from '@angular/core/testing';
 import { SearchService } from './search.service';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { HttpRequest, provideHttpClient } from '@angular/common/http';
@@ -50,7 +50,7 @@ describe('SearchService', () => {
     expect(range[1]).toBeInstanceOf(Date);
   });
 
-  it('should handle error and still finalize loading state', () => {
+  it('should handle error and still finalize loading state', fakeAsync(() => {
     searchService.getFloodEvents(mockCriteria);
 
     const req = httpMock.expectOne((req: HttpRequest<any>) =>
@@ -63,14 +63,11 @@ describe('SearchService', () => {
       req.params.getAll('eventType')!.includes('Flood Warning')
     );
 
-    try {
-      req.flush({}, { status: 500, statusText: 'Server Error' });
-    } catch (_) {
-      // Suppress the expected error — interceptor handles it in the app
-    }
-
+    expect(searchService.isLoading()).toBeTrue();
+    req.flush({}, { status: 500, statusText: 'Server Error' });
+    tick();
     expect(searchService.isLoading()).toBeFalse();
-  });
+  }));
 
   it('should fetch flood warnings and update subjects + isLoading state', () => {
     const floodSpy = jasmine.createSpy();

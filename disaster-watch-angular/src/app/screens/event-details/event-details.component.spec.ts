@@ -4,7 +4,8 @@ import { EventDetailsComponent } from './event-details.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MessageService } from 'primeng/api';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { of } from 'rxjs';
 
 describe('EventDetailsComponent', () => {
   let component: EventDetailsComponent;
@@ -17,7 +18,17 @@ describe('EventDetailsComponent', () => {
         provideHttpClient(),
         provideHttpClientTesting(),
         MessageService,
-        ActivatedRoute
+        {
+          provide: ActivatedRoute,
+          useValue: {
+            paramMap: of(convertToParamMap({ id: '123' })), // Replace '123' with your test value
+            snapshot: {
+              paramMap: {
+                get: (key: string) => '123'
+              }
+            }
+          }
+        }
       ]
 
     })

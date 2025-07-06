@@ -63,6 +63,7 @@ describe('DisasterListComponent', () => {
     searchService = TestBed.inject(SearchService);
     fixture = TestBed.createComponent(DisasterListComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
   it('should display component when event results are > 0, then hide when results are = 0', () => {
