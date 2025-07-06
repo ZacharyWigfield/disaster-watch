@@ -27,7 +27,6 @@ describe('DisasterTableComponent', () => {
     searchService = TestBed.inject(SearchService);
     fixture = TestBed.createComponent(DisasterTableComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {

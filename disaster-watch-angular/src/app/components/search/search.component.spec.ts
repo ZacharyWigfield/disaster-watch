@@ -85,10 +85,10 @@ describe('SearchComponent', () => {
   })
 
   it('should perform proper search service API call when handleSearch() is called', () => {
-    spyOn(searchService, 'getFloodWarnings');
+    spyOn(searchService, 'getFloodEvents');
     component.form.setValue(mockCriteria);
     component.handleSearch();
-    expect(searchService.getFloodWarnings).toHaveBeenCalledWith(mockCriteria);
+    expect(searchService.getFloodEvents).toHaveBeenCalledWith(mockCriteria);
 
   })
 

@@ -2,11 +2,11 @@
     <app-loading [loading]="isLoading()"></app-loading>
     @if (floodEventResults().length > 0) {
     <div class="content-container">
-        <div class="disaster-list-content">
+        <div id="disaster-list-div" class="disaster-list-content">
             <app-disaster-table [events]="floodEventResults()" rows="25"></app-disaster-table>
         </div>
 
-        <div class="disaster-list-content">
+        <div id="map-div" class="disaster-list-content">
             <app-event-map [mapId]="'disaster-list'" [floodEvents]="floodEventResults()!" [userLat]="userLocation().lat"
                 [userLong]="userLocation().long"></app-event-map>
         </div>

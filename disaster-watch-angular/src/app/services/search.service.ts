@@ -13,7 +13,7 @@ import { DISASTER_TYPES } from '../shared/constants/disaster-types.constant';
 export class SearchService {
   private readonly serverURL = 'http://localhost:8080'
 
-  readonly floodWarningsSubject = new BehaviorSubject<FloodEvent[]>([]);
+  readonly floodEventsSubject = new BehaviorSubject<FloodEvent[]>([]);
   readonly userLocationSubject = new BehaviorSubject<UserLocation>({ lat: undefined, long: undefined })
   readonly isLoading = signal(false);
 
@@ -33,7 +33,7 @@ export class SearchService {
     return this._form;
   }
 
-  getFloodWarnings(searchCriteria: SearchCriteria): void {
+  getFloodEvents(searchCriteria: SearchCriteria): void {
     const url = `${this.serverURL}/api/disasters/floods/events`
     let params = new HttpParams()
       .set('searchLocation', searchCriteria.searchBar)
@@ -48,7 +48,7 @@ export class SearchService {
 
     this.http.get<FloodEventWithUserLocation>(url, { params }).pipe(
       tap((results) => {
-        this.floodWarningsSubject.next(results.floodEvents)
+        this.floodEventsSubject.next(results.floodEvents)
         this.userLocationSubject.next({ lat: results.userLat, long: results.userLong })
       }),
       finalize(() => this.isLoading.set(false)),

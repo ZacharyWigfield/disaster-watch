@@ -51,7 +51,7 @@ describe('SearchService', () => {
   });
 
   it('should handle error and still finalize loading state', () => {
-    searchService.getFloodWarnings(mockCriteria);
+    searchService.getFloodEvents(mockCriteria);
 
     const req = httpMock.expectOne((req: HttpRequest<any>) =>
       req.method === 'GET' &&
@@ -76,12 +76,12 @@ describe('SearchService', () => {
     const floodSpy = jasmine.createSpy();
     const locationSpy = jasmine.createSpy();
 
-    searchService.floodWarningsSubject.subscribe(floodSpy);
+    searchService.floodEventsSubject.subscribe(floodSpy);
     searchService.userLocationSubject.subscribe(locationSpy);
 
     expect(searchService.isLoading()).toBeFalse();
 
-    searchService.getFloodWarnings(mockCriteria);
+    searchService.getFloodEvents(mockCriteria);
     expect(searchService.isLoading()).toBeTrue();
 
     const req = httpMock.expectOne((req: HttpRequest<any>) =>

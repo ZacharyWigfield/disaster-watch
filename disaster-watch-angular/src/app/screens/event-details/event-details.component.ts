@@ -29,7 +29,7 @@ export class EventDetailsComponent {
   isEventStillOccuring = signal<String>("NO");
 
   readonly userLocation = toSignal<UserLocation | undefined>(this.searchService.userLocationSubject);
-  readonly floodEvents = toSignal<FloodEvent[] | undefined>(this.searchService.floodWarningsSubject);
+  readonly floodEvents = toSignal<FloodEvent[] | undefined>(this.searchService.floodEventsSubject);
   private readonly paramMapSignal = toSignal(this.route.paramMap);
   readonly floodEvent = signal<FloodEvent | undefined>(undefined);
   readonly intersectingEvents = signal<FloodEvent[]>([])
