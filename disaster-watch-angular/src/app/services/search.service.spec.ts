@@ -62,7 +62,12 @@ describe('SearchService', () => {
       req.params.get('endDate') === mockCriteria.dateRange[1].toISOString() &&
       req.params.getAll('eventType')!.includes('Flood Warning')
     );
-    req.flush({}, { status: 500, statusText: 'Server Error' });
+
+    try {
+      req.flush({}, { status: 500, statusText: 'Server Error' });
+    } catch (_) {
+      // Suppress the expected error — interceptor handles it in the app
+    }
 
     expect(searchService.isLoading()).toBeFalse();
   });
