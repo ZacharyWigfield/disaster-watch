@@ -7,6 +7,7 @@ import { MessageService } from 'primeng/api';
 import { FloodEvent } from '../../shared/model/floodEventWithUserLocation';
 import { Component, Input } from '@angular/core';
 import { DisasterTableComponent } from '../disaster-table/disaster-table.component';
+import { mockFloodEvents } from '../../../assets/mock-data/flood-event-mock-data';
 
 describe('DisasterListComponent', () => {
   let component: DisasterListComponent;
@@ -22,25 +23,6 @@ describe('DisasterListComponent', () => {
     @Input() events!: FloodEvent[];
     @Input() rows!: number;
   }
-
-  let mockFloodEvents: FloodEvent[] = [{
-    id: 510,
-    areaDesc: ["Angelina, TX",],
-    event: "Flood Warning",
-    description: "...The Flood Warning ",
-    certainty: "Observed",
-    severity: "Severe",
-    urgency: "Immediate",
-    effective: "2025-07-02T13:22:00Z",
-    expires: "2025-07-03T15:00:00Z",
-    latitude: 31.54,
-    longitude: -94.84,
-    userToEventDistance: 142.84214825297852,
-    polygonGeoJson: {
-      coordinates: [[[-94.84, 31.54], [-94.72, 31.47],]],
-      type: "Polygon"
-    }
-  }]
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -75,7 +57,7 @@ describe('DisasterListComponent', () => {
 
     searchService.floodEventsSubject.next([]);
     fixture.detectChanges();
-    
+
     containerDiv = fixture.nativeElement.querySelector(".content-container")
     expect(containerDiv).toBeFalsy();
   })
