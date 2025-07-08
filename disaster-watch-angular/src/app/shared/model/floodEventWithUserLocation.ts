@@ -21,7 +21,7 @@ export type FloodEvent = {
 }
 
 export interface GeoJsonPolygon {
-    type: 'Polygon';
+    type: string;
     coordinates: [number, number][][];
 }
 

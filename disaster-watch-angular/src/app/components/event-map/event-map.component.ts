@@ -22,7 +22,7 @@ export class EventMapComponent {
   readonly userLat = input<number | undefined>(undefined);
   readonly userLong = input<number | undefined>(undefined);
 
-  private readonly userLocation = signal(`${this.searchService.searchForm.controls.searchBar.value}`);
+  readonly userLocation = signal(`${this.searchService.searchForm.controls.searchBar.value}`);
 
   private customIcon = L.icon({
     iconUrl: 'assets/leaflet/marker-icon.png',
