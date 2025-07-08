@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SearchService } from '../../services/search.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -6,7 +6,7 @@ import { FloodEvent, UserLocation } from '../../shared/model/floodEventWithUserL
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { EventMapComponent } from '../../components/event-map/event-map.component';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { DisasterTableComponent } from '../../components/disaster-table/disaster-table.component';
 import { CardModule } from 'primeng/card';
 
@@ -22,6 +22,7 @@ export class EventDetailsComponent {
   private router = inject(Router);
   private searchService = inject(SearchService);
   private messageService = inject(MessageService);
+  private readonly destroyRef = inject(DestroyRef);
 
   private readonly now: Date = new Date();
   daysSinceEvent = signal<number>(0);
@@ -39,6 +40,8 @@ export class EventDetailsComponent {
     return idParam && !isNaN(+idParam) ? +idParam : null;
   });
 
+  lastId: number | null = null;
+
   constructor() {
     effect(() => {
       const id = this.id();
@@ -49,7 +52,7 @@ export class EventDetailsComponent {
         return;
       }
 
-      if (floodEvents) {
+      if (floodEvents?.length) {
         const found = floodEvents.find(event => event.id === id);
         if (found) {
           this.loadEventByPreviousSearchData(found);
@@ -60,7 +63,10 @@ export class EventDetailsComponent {
         this.loadEventById(id);
       }
 
-      this.getIntersectingEventsWithinYear(id);
+      if (id !== this.lastId) {
+        this.getIntersectingEventsWithinYear(id);
+        this.lastId = id;
+      }
 
     });
   }
@@ -71,7 +77,9 @@ export class EventDetailsComponent {
   }
 
   private loadEventById(id: number) {
-    this.searchService.getFloodEventByID(id).subscribe({
+    this.searchService.getFloodEventByID(id).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
       next: (data: FloodEvent) => {
         this.floodEvent.set(data);
         this.calculateTimeSinceEvent(data);
@@ -96,7 +104,9 @@ export class EventDetailsComponent {
   }
 
   private getIntersectingEventsWithinYear(id: number) {
-    this.searchService.getIntersectingEventsWithinYear(id).subscribe({
+    this.searchService.getIntersectingEventsWithinYear(id).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
       next: (data: FloodEvent[]) => {
         this.intersectingEvents.set(data);
       }
@@ -115,7 +125,7 @@ export class EventDetailsComponent {
       this.hoursSinceEvent.set(Math.round(hours % 24));
     }
 
-    if (expireDate > now){
+    if (expireDate > now) {
       this.isEventStillOccuring.set("YES")
     }
   }
