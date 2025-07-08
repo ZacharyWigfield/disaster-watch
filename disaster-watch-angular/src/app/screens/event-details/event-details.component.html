@@ -3,18 +3,18 @@
     @if (floodEvent()) {
     <div class="event-details-content">
         <div class="event-details-row">
-            <!-- <p-card header="Event ID:">
+            <p-card header="Event ID:">
                 <span>{{id()}}</span>
-            </p-card> -->
+            </p-card>
 
-            <!-- <p-card header="Time since event:">
+            <p-card header="Time since event:">
                 @if(daysSinceEvent()){
                 <span>{{daysSinceEvent()}} days</span>
                 }
                 <span> {{hoursSinceEvent()}} hours</span>
-            </p-card> -->
+            </p-card>
 
-            <!-- <p-card header="Distance between user and event:">
+            <p-card header="Distance between user and event:">
                 @if(floodEvent()?.userToEventDistance){
                 <div>
                     <span>{{floodEvent()?.userToEventDistance | number:'1.0-0' }} miles</span>
@@ -25,14 +25,14 @@
                     <span>No user location entered</span>
                 </div>
                 }
-            </p-card> -->
+            </p-card>
 
-            <!-- <p-card header="Is event still occuring:">
+            <p-card header="Is event still occuring:">
                 <span>{{isEventStillOccuring()}}</span>
-            </p-card> -->
+            </p-card>
         </div>
 
-        <!-- <p-card>
+        <p-card>
             <div class="event-details-row">
                 <div>
                     <div>Event Type:</div>
@@ -64,11 +64,11 @@
                     <div>{{floodEvent()!.expires | date:'short'}}</div>
                 </div>
             </div>
-        </p-card> -->
+        </p-card>
 
-        <!-- <p-card>
+        <p-card>
             <div>{{floodEvent()!.description}}</div>
-        </p-card> -->
+        </p-card>
 
         @if(intersectingEvents()){
         <div>

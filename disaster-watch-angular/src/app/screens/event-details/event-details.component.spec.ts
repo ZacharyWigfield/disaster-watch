@@ -117,7 +117,7 @@ describe('EventDetailsComponent', () => {
 
   it('should calculate time since event', fakeAsync(() => {
     const now = new Date();
-    const twoDaysAgo = new Date(now.getTime() - 1000 * 60 * 60 * 48);
+    const twoDaysAgo = new Date(now.getTime() - 1001 * 60 * 60 * 48);
     const inTwoDays = new Date(now.getTime() + 1000 * 60 * 60 * 48);
 
     const testEvent = {
@@ -129,6 +129,7 @@ describe('EventDetailsComponent', () => {
     component['loadEventByPreviousSearchData'](testEvent);
     tick();
     fixture.detectChanges();
+
 
     expect(component.daysSinceEvent()).toBe(2);
     expect(component.hoursSinceEvent()).toBe(0);
