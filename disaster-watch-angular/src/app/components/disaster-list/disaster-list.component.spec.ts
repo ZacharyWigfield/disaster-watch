@@ -34,10 +34,10 @@ describe('DisasterListComponent', () => {
       ]
     }).overrideComponent(DisasterListComponent, {
       remove: {
-        imports: [DisasterTableComponent] // remove the real one
+        imports: [DisasterTableComponent]
       },
       add: {
-        imports: [MockDisasterTableComponent] // add the mock
+        imports: [MockDisasterTableComponent] 
       }
     })
       .compileComponents();

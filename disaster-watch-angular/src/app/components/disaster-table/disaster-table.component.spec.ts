@@ -7,7 +7,6 @@ import { MessageService } from 'primeng/api';
 import { mockFloodEvents } from '../../../assets/mock-data/flood-event-mock-data';
 import { TableModule } from 'primeng/table';
 import { provideRouter } from '@angular/router';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('DisasterTableComponent', () => {
@@ -16,7 +15,6 @@ describe('DisasterTableComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [
         DisasterTableComponent,
         TableModule,
