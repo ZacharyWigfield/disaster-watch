@@ -4,47 +4,47 @@ import { DisasterTableComponent } from './disaster-table.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MessageService } from 'primeng/api';
-import { Component } from '@angular/core';
-import { FloodEvent } from '../../shared/model/floodEventWithUserLocation';
 import { mockFloodEvents } from '../../../assets/mock-data/flood-event-mock-data';
-import { By } from '@angular/platform-browser';
+import { TableModule } from 'primeng/table';
+import { provideRouter } from '@angular/router';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('DisasterTableComponent', () => {
-  @Component({
-    standalone: true,
-    imports: [DisasterTableComponent],
-    template: `<app-disaster-table [events]="mockFloodEvents" [paginateRows]="15" />`
-  })
-  class HostComponent {
-    mockFloodEvents: FloodEvent[] = mockFloodEvents
-  }
-
-  let hostFixture: ComponentFixture<HostComponent>;
-  let hostComponent: HostComponent;
+  let fixture: ComponentFixture<DisasterTableComponent>;
+  let component: DisasterTableComponent;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
       imports: [
         DisasterTableComponent,
+        TableModule,
+        BrowserAnimationsModule,
       ],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
         MessageService,
+        provideRouter([]),
       ]
     })
       .compileComponents();
 
-    hostFixture = TestBed.createComponent(HostComponent);
-    hostComponent = hostFixture.componentInstance;
+    fixture = TestBed.createComponent(DisasterTableComponent);
+    component = fixture.componentInstance;
   });
 
   it("should input values properly", () => {
-    hostFixture.detectChanges();
-    const disasterTableDebugElement = hostFixture.debugElement.query(By.directive(DisasterTableComponent));
-    const disasterTableComponent = disasterTableDebugElement.componentInstance as DisasterTableComponent;
+    const testEvents = mockFloodEvents
+    const testRows = 20
 
-    expect(disasterTableComponent.events.length).toEqual(3)
-    expect(disasterTableComponent.paginateRows).toEqual(15)
+    fixture.componentRef.setInput('events', testEvents);
+    fixture.componentRef.setInput('paginateRows', testRows);
+    // fixture.detectChanges();
+
+    expect(component.events().length).toEqual(3)
+    expect(component.paginateRows()).toEqual(20)
   })
 });
+
