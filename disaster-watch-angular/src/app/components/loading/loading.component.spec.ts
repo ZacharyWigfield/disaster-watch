@@ -1,34 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { LoadingComponent } from './loading.component';
-import { Component } from '@angular/core';
-
-@Component({
-  standalone: true,
-  imports: [LoadingComponent],
-  template: `<app-loading [loading]="isLoading" />`
-})
-class HostComponent {
-  isLoading = false;
-}
 
 describe('LoadingComponent', () => {
-  let component: HostComponent;
-  let fixture: ComponentFixture<HostComponent>;
+  let fixture: ComponentFixture<LoadingComponent>;
+  let component: LoadingComponent;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HostComponent]
-    })
-      .compileComponents();
+      imports: [LoadingComponent] 
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(HostComponent);
+    fixture = TestBed.createComponent(LoadingComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
-  it('should show loading message when loading is true', () => {
-    component.isLoading = true;
+  it('should show loading spinner when loading is true', () => {
+    fixture.componentRef.setInput('loading', true);
     fixture.detectChanges();
 
     const spinner = fixture.nativeElement.querySelector('#loading-spinner');
@@ -36,7 +23,7 @@ describe('LoadingComponent', () => {
   });
 
   it('should not show anything when loading is false', () => {
-    component.isLoading = false;
+    fixture.componentRef.setInput('loading', false);
     fixture.detectChanges();
 
     const spinner = fixture.nativeElement.querySelector('#loading-spinner');
