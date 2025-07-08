@@ -92,4 +92,12 @@ describe('SearchComponent', () => {
 
   })
 
+  it('should not perform search if form is invalid', () => {
+  const spy = spyOn(searchService, 'getFloodEvents');
+  component.form.reset(); 
+  component.handleSearch();
+
+  expect(spy).not.toHaveBeenCalled();
+});
+
 });
