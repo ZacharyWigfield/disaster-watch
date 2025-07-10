@@ -1,8 +1,14 @@
 #home-container {
-
     height: 100vh;
     text-align: center;
 
+    background: hsla(0, 0%, 100%, 1);
+
+    background: linear-gradient(0deg, hsla(0, 0%, 100%, 1) 0%, hsla(197, 78%, 30%, 1) 83%);
+
+    background: -moz-linear-gradient(0deg, hsla(0, 0%, 100%, 1) 0%, hsla(197, 78%, 30%, 1) 83%);
+
+    background: -webkit-linear-gradient(0deg, hsla(0, 0%, 100%, 1) 0%, hsla(197, 78%, 30%, 1) 83%);
 }
 
 #search-and-banner {
@@ -10,14 +16,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-
-background: hsla(0, 0%, 100%, 1);
-
-background: linear-gradient(0deg, hsla(0, 0%, 100%, 1) 0%, hsla(197, 78%, 30%, 1) 83%);
-
-background: -moz-linear-gradient(0deg, hsla(0, 0%, 100%, 1) 0%, hsla(197, 78%, 30%, 1) 83%);
-
-background: -webkit-linear-gradient(0deg, hsla(0, 0%, 100%, 1) 0%, hsla(197, 78%, 30%, 1) 83%);
+    height: 30%;
+    width: auto;
 }
 
 .banner-container {
@@ -25,17 +25,20 @@ background: -webkit-linear-gradient(0deg, hsla(0, 0%, 100%, 1) 0%, hsla(197, 78%
     align-items: flex-end;
     justify-content: center;
     gap: 2rem;
-    margin: 2rem;
-
 }
 
 .banner-logo {
-    width: 15rem;
-    height: 15rem;
+    width: 12rem;
+    height: 12rem;
     object-fit: contain;
+    padding: 1rem;
 }
 
 .banner-text {
     font-size: 5rem;
     line-height: 2;
+}
+
+#event-container {
+    height: 70%;
 }

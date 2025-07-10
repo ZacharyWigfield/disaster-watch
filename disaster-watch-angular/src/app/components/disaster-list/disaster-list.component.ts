@@ -6,10 +6,11 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { FloodEvent, UserLocation } from '../../shared/model/floodEventWithUserLocation';
 import { EventMapComponent } from '../event-map/event-map.component';
 import { DisasterTableComponent } from '../disaster-table/disaster-table.component';
+import { CardModule } from 'primeng/card';
 
 @Component({
   selector: 'app-disaster-list',
-  imports: [LoadingComponent, EventMapComponent, DisasterTableComponent],
+  imports: [LoadingComponent, EventMapComponent, DisasterTableComponent, CardModule],
   templateUrl: './disaster-list.component.html',
   styleUrl: './disaster-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
