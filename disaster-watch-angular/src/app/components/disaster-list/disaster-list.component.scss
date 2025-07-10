@@ -26,3 +26,16 @@ p-card.disaster-card ::ng-deep .p-card-body {
 p-card.disaster-card ::ng-deep .p-card-content {
     height: 100%;
 }
+
+.empty-results {
+  width: 100%; 
+  display: flex;
+  justify-content: center; 
+  padding: 2rem 0; 
+}
+
+.empty-results p-card {
+  width: 30%;       
+  text-align: center;
+  word-wrap: break-word;
+}

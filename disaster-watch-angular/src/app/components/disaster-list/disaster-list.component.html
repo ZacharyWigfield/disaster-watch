@@ -10,10 +10,23 @@
 
         <div class="disaster-list-content">
             <p-card class="disaster-card">
-                    <app-event-map [mapId]="'disaster-list'" [floodEvents]="searchService.floodEvents()"
-                        [userLat]="searchService.userLocation().lat" [userLong]="searchService.userLocation().long"></app-event-map>
+                <app-event-map [mapId]="'disaster-list'" [floodEvents]="searchService.floodEvents()"
+                    [userLat]="searchService.userLocation().lat"
+                    [userLong]="searchService.userLocation().long"></app-event-map>
             </p-card>
         </div>
+    </div>
+    } @else if (searchService.userLocation().long) {
+    <div class="empty-results">
+        <p-card class="empty-results-card">
+            <h1>No Search Results Found</h1>
+        </p-card>
+    </div>
+    } @else {
+    <div class="empty-results">
+        <p-card>
+            <h1>Perform A Search Above To See Disaster Data</h1>
+        </p-card>
     </div>
     }
 </div>
