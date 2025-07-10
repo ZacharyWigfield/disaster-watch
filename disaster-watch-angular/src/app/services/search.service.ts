@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { finalize, map, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { finalize, tap } from 'rxjs/operators';
 import { FloodEvent, FloodEventWithUserLocation, UserLocation } from '../shared/model/floodEventWithUserLocation';
 import { SearchCriteria, SearchCriteriaFormGroup } from '../shared/model/searchCriteria';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -13,8 +13,8 @@ import { DISASTER_TYPES } from '../shared/constants/disaster-types.constant';
 export class SearchService {
   private readonly serverURL = 'http://localhost:8080'
 
-  readonly floodEventsSubject = new BehaviorSubject<FloodEvent[]>([]);
-  readonly userLocationSubject = new BehaviorSubject<UserLocation>({ lat: undefined, long: undefined })
+  readonly floodEvents = signal<FloodEvent[]>([]);
+  readonly userLocation = signal<UserLocation>({ lat: undefined, long: undefined })
   readonly isLoading = signal(false);
 
   private readonly today = new Date();
@@ -48,8 +48,8 @@ export class SearchService {
 
     this.http.get<FloodEventWithUserLocation>(url, { params }).pipe(
       tap((results) => {
-        this.floodEventsSubject.next(results.floodEvents)
-        this.userLocationSubject.next({ lat: results.userLat, long: results.userLong })
+        this.floodEvents.set(results.floodEvents)
+        this.userLocation.set({ lat: results.userLat, long: results.userLong })
       }),
       finalize(() => this.isLoading.set(false)),
     ).subscribe({

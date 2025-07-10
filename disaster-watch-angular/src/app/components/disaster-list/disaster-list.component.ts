@@ -16,10 +16,7 @@ import { CardModule } from 'primeng/card';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DisasterListComponent {
-  private readonly searchService = inject(SearchService)
-  readonly floodEventResults: Signal<FloodEvent[]> = toSignal(this.searchService.floodEventsSubject, { initialValue: [] })
-  readonly isLoading: Signal<boolean> = this.searchService.isLoading
-  readonly userLocation: Signal<UserLocation> = toSignal(this.searchService.userLocationSubject, { initialValue: { lat: undefined, long: undefined } })
+  public readonly searchService = inject(SearchService)
 
   constructor() { }
 

@@ -81,8 +81,8 @@
     </div>
 
     <div id="map-container" class="event-details-content">
-        <app-event-map [mapId]="'event-details'" [floodEvents]="[floodEvent()!]" [userLat]="userLocation()?.lat"
-            [userLong]="userLocation()?.long" />
+        <app-event-map [mapId]="'event-details'" [floodEvents]="[floodEvent()!]" [userLat]="searchService.userLocation().lat"
+            [userLong]="searchService.userLocation().long" />
     </div>
     }
 </div>

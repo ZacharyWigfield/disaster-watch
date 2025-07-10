@@ -20,7 +20,7 @@ import { CardModule } from 'primeng/card';
 export class EventDetailsComponent {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private searchService = inject(SearchService);
+  public searchService = inject(SearchService);
   private messageService = inject(MessageService);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -29,8 +29,6 @@ export class EventDetailsComponent {
   hoursSinceEvent = signal<number>(0);
   isEventStillOccuring = signal<String>("NO");
 
-  readonly userLocation = toSignal<UserLocation | undefined>(this.searchService.userLocationSubject);
-  readonly floodEvents = toSignal<FloodEvent[] | undefined>(this.searchService.floodEventsSubject);
   private readonly paramMapSignal = toSignal(this.route.paramMap);
   readonly floodEvent = signal<FloodEvent | undefined>(undefined);
   readonly intersectingEvents = signal<FloodEvent[]>([])
@@ -45,7 +43,7 @@ export class EventDetailsComponent {
   constructor() {
     effect(() => {
       const id = this.id();
-      const floodEvents = this.floodEvents();
+      const floodEvents = this.searchService.floodEvents();
 
       if (id === null) {
         this.router.navigate(['/']);

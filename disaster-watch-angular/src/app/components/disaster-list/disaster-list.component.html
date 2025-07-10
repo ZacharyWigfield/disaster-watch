@@ -1,17 +1,17 @@
 <div id="disaster-list-container">
-    <app-loading [loading]="isLoading()"></app-loading>
-    @if (floodEventResults().length > 0) {
+    <app-loading [loading]="searchService.isLoading()"></app-loading>
+    @if (searchService.floodEvents().length > 0) {
     <div class="content-container">
         <div id="disaster-list-div" class="disaster-list-content">
             <p-card class="disaster-card">
-                <app-disaster-table [events]="floodEventResults()" [paginateRows]="25"></app-disaster-table>
+                <app-disaster-table [events]="searchService.floodEvents()" [paginateRows]="25"></app-disaster-table>
             </p-card>
         </div>
 
         <div class="disaster-list-content">
             <p-card class="disaster-card">
-                    <app-event-map [mapId]="'disaster-list'" [floodEvents]="floodEventResults()!"
-                        [userLat]="userLocation().lat" [userLong]="userLocation().long"></app-event-map>
+                    <app-event-map [mapId]="'disaster-list'" [floodEvents]="searchService.floodEvents()"
+                        [userLat]="searchService.userLocation().lat" [userLong]="searchService.userLocation().long"></app-event-map>
             </p-card>
         </div>
     </div>
