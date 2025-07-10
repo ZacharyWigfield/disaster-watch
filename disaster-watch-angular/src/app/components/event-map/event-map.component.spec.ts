@@ -1,11 +1,13 @@
-import { ComponentFixture, fakeAsync, flushMicrotasks, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EventMapComponent } from './event-map.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import * as L from 'leaflet'; import { mockFloodEvents, mockSingleFloodEvent, mockSingleFloodEventNoPolygon } from '../../../assets/mock-data/flood-event-mock-data';
+import * as L from 'leaflet'; 
+import { mockFloodEvents, mockSingleFloodEvent, mockSingleFloodEventNoPolygon } from '../../../assets/mock-data/flood-event-mock-data';
 import { SearchService } from '../../services/search.service';
 import { Router } from '@angular/router';
+import { provideZonelessChangeDetection } from '@angular/core';
 
 describe('EventMapComponent', () => {
   let component: EventMapComponent;
@@ -17,6 +19,7 @@ describe('EventMapComponent', () => {
     await TestBed.configureTestingModule({
       imports: [EventMapComponent],
       providers: [
+        provideZonelessChangeDetection(),
         provideHttpClient(),
         provideHttpClientTesting(),
         Router
@@ -63,16 +66,16 @@ describe('EventMapComponent', () => {
     expect(component.userLocation()).toBe('Portland, OR');
   });
 
-  it('should call initMap when floodEvents changes to new value', fakeAsync(() => {
+  it('should call initMap when floodEvents changes to new value', async () => {
     const spy = spyOn<any>(component, 'initMap');
     fixture.detectChanges();
     fixture.componentRef.setInput('floodEvents', [mockSingleFloodEvent]);
     fixture.componentRef.setInput('mapId', "1");
-    flushMicrotasks();
+    await Promise.resolve();
     fixture.detectChanges();
 
     expect(spy).toHaveBeenCalled();
-  }));
+  });
 
   it('should navigate to details page on marker click', () => {
     const navigateSpy = spyOn(router, 'navigate');

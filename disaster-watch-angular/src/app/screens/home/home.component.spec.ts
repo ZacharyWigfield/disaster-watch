@@ -5,6 +5,7 @@ import { SearchService } from '../../services/search.service';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MessageService } from 'primeng/api';
+import { provideZonelessChangeDetection } from '@angular/core';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -15,6 +16,7 @@ describe('HomeComponent', () => {
     await TestBed.configureTestingModule({
       imports: [HomeComponent],
       providers: [
+        provideZonelessChangeDetection(),
         provideHttpClient(),
         provideHttpClientTesting(),
         MessageService,

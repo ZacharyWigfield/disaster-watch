@@ -1,13 +1,13 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, } from '@angular/core/testing';
 import { EventDetailsComponent } from './event-details.component';
 import { ActivatedRoute, convertToParamMap, provideRouter, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { BehaviorSubject, of, throwError } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { SearchService } from '../../services/search.service';
 import { mockFloodEvents, mockSingleFloodEvent } from '../../../assets/mock-data/flood-event-mock-data';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { Component, Input } from '@angular/core';
+import { Component, Input, provideZonelessChangeDetection } from '@angular/core';
 import { FloodEvent } from '../../shared/model/floodEventWithUserLocation';
 import { DisasterTableComponent } from '../../components/disaster-table/disaster-table.component';
 import { CardModule } from 'primeng/card';
@@ -34,6 +34,7 @@ describe('EventDetailsComponent', () => {
     await TestBed.configureTestingModule({
       imports: [EventDetailsComponent, MockDisasterTableComponent, CardModule],
       providers: [
+        provideZonelessChangeDetection(),
         provideHttpClient(),
         provideHttpClientTesting(),
         provideRouter([]),
@@ -79,43 +80,43 @@ describe('EventDetailsComponent', () => {
     expect(navigateSpy).toHaveBeenCalledWith(['/']);
   });
 
-  it('should call loadEventByPreviousSearchData when floodEvents contains matching ID', fakeAsync(() => {
-    searchService.floodEventsSubject.next(mockFloodEvents);
+  it('should call loadEventByPreviousSearchData when floodEvents contains matching ID', async () => {
+    searchService.floodEvents.set(mockFloodEvents);
     paramMapSubject.next(convertToParamMap({ id: '510' }));
 
     const spy = spyOn<any>(EventDetailsComponent.prototype, 'loadEventByPreviousSearchData').and.callThrough();
 
     fixture.detectChanges();
-    tick();
+    await Promise.resolve();
 
     expect(spy).toHaveBeenCalled();
-  }));
+  });
 
-  it('should call loadEventById when floodEvents does not contain matching ID', fakeAsync(() => {
-    searchService.floodEventsSubject.next(mockFloodEvents);
+  it('should call loadEventById when floodEvents does not contain matching ID', async () => {
+    searchService.floodEvents.set(mockFloodEvents);
     paramMapSubject.next(convertToParamMap({ id: '999' }));
 
     const spy = spyOn<any>(EventDetailsComponent.prototype, 'loadEventById').and.callFake(() => { });
 
     fixture.detectChanges();
-    tick();
+    await Promise.resolve();
 
     expect(spy).toHaveBeenCalled();
-  }));
+  });
 
-  it('should call loadEventById when floodEvents does not contain any value', fakeAsync(() => {
-    searchService.floodEventsSubject.next([]);
+  it('should call loadEventById when floodEvents does not contain any value', async () => {
+    searchService.floodEvents.set([]);
     paramMapSubject.next(convertToParamMap({ id: '999' }));
 
     const spy = spyOn<any>(EventDetailsComponent.prototype, 'loadEventById').and.callFake(() => { });
 
     fixture.detectChanges();
-    tick();
+    await Promise.resolve();
 
     expect(spy).toHaveBeenCalled();
-  }));
+  });
 
-  it('should calculate time since event', fakeAsync(() => {
+  it('should calculate time since event', async () => {
     const now = new Date();
     const twoDaysAgo = new Date(now.getTime() - 1001 * 60 * 60 * 48);
     const inTwoDays = new Date(now.getTime() + 1000 * 60 * 60 * 48);
@@ -127,24 +128,24 @@ describe('EventDetailsComponent', () => {
     };
 
     component['loadEventByPreviousSearchData'](testEvent);
-    tick();
+    await Promise.resolve();
     fixture.detectChanges();
 
 
     expect(component.daysSinceEvent()).toBe(2);
     expect(component.hoursSinceEvent()).toBe(0);
     expect(component.isEventStillOccuring()).toBe('YES');
-  }));
+  });
 
-  it('should load intersecting events on init', fakeAsync(() => {
+  it('should load intersecting events on init', async () => {
     spyOn(searchService, 'getIntersectingEventsWithinYear').and.returnValue(of(mockFloodEvents));
     paramMapSubject.next(convertToParamMap({ id: '510' }));
 
     fixture.detectChanges();
-    tick();
+    await Promise.resolve();
 
     expect(component.intersectingEvents()).toEqual(mockFloodEvents);
     expect(component.id()).not.toBeNull();
     expect(searchService.getIntersectingEventsWithinYear).toHaveBeenCalledWith(component.id()!);
-  }));
+  });
 });

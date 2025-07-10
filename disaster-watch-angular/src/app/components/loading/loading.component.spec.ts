@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoadingComponent } from './loading.component';
+import { provideZonelessChangeDetection } from '@angular/core';
 
 describe('LoadingComponent', () => {
   let fixture: ComponentFixture<LoadingComponent>;
@@ -7,6 +8,7 @@ describe('LoadingComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      providers: [provideZonelessChangeDetection()],
       imports: [LoadingComponent] 
     }).compileComponents();
 

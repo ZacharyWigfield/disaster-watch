@@ -5,7 +5,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MessageService } from 'primeng/api';
 import { FloodEvent } from '../../shared/model/floodEventWithUserLocation';
-import { Component, Input } from '@angular/core';
+import { Component, Input, provideZonelessChangeDetection } from '@angular/core';
 import { DisasterTableComponent } from '../disaster-table/disaster-table.component';
 import { mockFloodEvents } from '../../../assets/mock-data/flood-event-mock-data';
 
@@ -28,6 +28,7 @@ describe('DisasterListComponent', () => {
     await TestBed.configureTestingModule({
       imports: [DisasterListComponent, MockDisasterTableComponent],
       providers: [
+        provideZonelessChangeDetection(),
         provideHttpClient(),
         provideHttpClientTesting(),
         MessageService,
@@ -49,13 +50,13 @@ describe('DisasterListComponent', () => {
   });
 
   it('should display component when event results are > 0, then hide when results are = 0', () => {
-    searchService.floodEventsSubject.next(mockFloodEvents)
+    searchService.floodEvents.set(mockFloodEvents)
     fixture.detectChanges()
 
     let containerDiv = fixture.nativeElement.querySelector(".content-container")
     expect(containerDiv).toBeTruthy()
 
-    searchService.floodEventsSubject.next([]);
+    searchService.floodEvents.set([]);
     fixture.detectChanges();
 
     containerDiv = fixture.nativeElement.querySelector(".content-container")
@@ -63,7 +64,7 @@ describe('DisasterListComponent', () => {
   })
 
   it('should display a div with list of events', () => {
-    searchService.floodEventsSubject.next(mockFloodEvents)
+    searchService.floodEvents.set(mockFloodEvents)
     fixture.detectChanges()
 
     const disasterList = fixture.nativeElement.querySelector("#disaster-list-div")
@@ -71,7 +72,7 @@ describe('DisasterListComponent', () => {
   })
 
   it('should display a div with event map', () => {
-    searchService.floodEventsSubject.next(mockFloodEvents)
+    searchService.floodEvents.set(mockFloodEvents)
     fixture.detectChanges()
 
     const eventMap = fixture.nativeElement.querySelector("#map-div")

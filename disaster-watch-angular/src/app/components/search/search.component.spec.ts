@@ -7,6 +7,7 @@ import { MessageService } from 'primeng/api';
 import { SearchCriteria } from '../../shared/model/searchCriteria';
 import { DISASTER_TYPES } from '../../shared/constants/disaster-types.constant';
 import { SearchService } from '../../services/search.service';
+import { provideZonelessChangeDetection } from '@angular/core';
 
 describe('SearchComponent', () => {
   let component: SearchComponent;
@@ -24,6 +25,7 @@ describe('SearchComponent', () => {
     await TestBed.configureTestingModule({
       imports: [SearchComponent],
       providers: [
+        provideZonelessChangeDetection(),
         provideHttpClient(),
         provideHttpClientTesting(),
         MessageService,

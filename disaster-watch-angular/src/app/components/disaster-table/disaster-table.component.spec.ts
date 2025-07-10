@@ -8,6 +8,7 @@ import { mockFloodEvents } from '../../../assets/mock-data/flood-event-mock-data
 import { TableModule } from 'primeng/table';
 import { provideRouter } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { provideZonelessChangeDetection } from '@angular/core';
 
 describe('DisasterTableComponent', () => {
   let fixture: ComponentFixture<DisasterTableComponent>;
@@ -21,6 +22,7 @@ describe('DisasterTableComponent', () => {
         BrowserAnimationsModule,
       ],
       providers: [
+        provideZonelessChangeDetection(),
         provideHttpClient(),
         provideHttpClientTesting(),
         MessageService,
