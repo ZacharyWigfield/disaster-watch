@@ -1,12 +1,19 @@
 <div id="home-container">
-    <div class="banner-container">
-        <img class="banner" ngSrc="assets/images/disaster-fixers-banner.webp" width="1515" height="600"
-            alt="Disaster Fixers Logo" priority />
+    <div id="search-and-banner">
+        <div class="banner-container">
+            <img class="banner-logo" ngSrc="assets/images/disaster-fixers-logo-transparent-cropped.png" width="250"
+                height="250" alt="Disaster Fixers Logo" priority />
+
+            <span class="banner-text">
+                Disaster Fixers
+            </span>
+        </div>
+
+        <div>
+            <app-search></app-search>
+        </div>
     </div>
 
-    <div>
-        <app-search></app-search>
-    </div>
 
     <div class="container">
         <app-disaster-list></app-disaster-list>
