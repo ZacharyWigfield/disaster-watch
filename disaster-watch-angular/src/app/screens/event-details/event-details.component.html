@@ -2,22 +2,22 @@
     <p-toast position="top-right" />
     @if (floodEvent()) {
     <div class="half-page-container">
-        <div class="header-info-container">
-            <p-card class="header-info-card">
-
+        <div class="event-details-container">
+            <p-card class="event-details-card">
+               
                 <div class="event-details-row">
-                    <p-card class="header-info-small-card" header="Event ID:">
+                    <p-card class="event-details-small-card" header="Event ID:">
                         <span>{{id()}}</span>
                     </p-card>
 
-                    <p-card class="header-info-small-card" header="Time since event:">
+                    <p-card class="event-details-small-card" header="Time since event:">
                         @if(daysSinceEvent()){
                         <span>{{daysSinceEvent()}} days</span>
                         }
                         <span> {{hoursSinceEvent()}} hours</span>
                     </p-card>
 
-                    <p-card class="header-info-small-card" header="Distance between user and event:">
+                    <p-card class="event-details-small-card" header="Distance between user and event:">
                         @if(floodEvent()?.userToEventDistance){
                         <div>
                             <span>{{floodEvent()?.userToEventDistance | number:'1.0-0' }} miles</span>
@@ -30,38 +30,38 @@
                         }
                     </p-card>
 
-                    <p-card class="header-info-small-card" header="Is event still occuring:">
+                    <p-card class="event-details-small-card" header="Is event still occuring:">
                         <span>{{isEventStillOccuring()}}</span>
                     </p-card>
                 </div>
 
                 <div class="event-details-row">
-                    <p-card class="header-info-small-card" header="Event Type:">
+                    <p-card class="event-details-small-card" header="Event Type:">
                         <span>{{floodEvent()!.event}}</span>
                     </p-card>
 
-                    <p-card class="header-info-small-card" header="Severity:">
+                    <p-card class="event-details-small-card" header="Severity:">
                         <span>{{floodEvent()!.severity}}</span>
                     </p-card>
 
-                    <p-card class="header-info-small-card" header="Certainty:">
+                    <p-card class="event-details-small-card" header="Certainty:">
                         <span>{{floodEvent()!.certainty}}</span>
                     </p-card>
 
-                    <p-card class="header-info-small-card" header="Urgency:">
+                    <p-card class="event-details-small-card" header="Urgency:">
                         <span>{{floodEvent()!.urgency}}</span>
                     </p-card>
 
-                    <p-card class="header-info-small-card" header="Effective:">
+                    <p-card class="event-details-small-card" header="Effective:">
                         <span>{{floodEvent()!.effective}}</span>
                     </p-card>
 
-                    <p-card class="header-info-small-card" header="Expires:">
+                    <p-card class="event-details-small-card" header="Expires:">
                         <span>{{floodEvent()!.expires}}</span>
                     </p-card>
                 </div>
 
-                <p-card class="header-info-small-card">
+                <p-card class="event-details-small-card">
                     <div>{{floodEvent()!.description}}</div>
                 </p-card>
 
