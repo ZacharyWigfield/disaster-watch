@@ -18,7 +18,11 @@ body {
 }
 
 h1 {
-  font-size: 5rem;
+  font-size: 3vw;
+}
+
+h2 {
+   font-size: 2vw;
 }
 
 body .p-card {
@@ -30,5 +34,10 @@ body .p-card {
 
 body .p-card h1 {
   color: #0D3449;
+  text-shadow: 2px 2px 2px #A7C7D4;
+}
+
+body .p-card h2 {
+  color: white;
   text-shadow: 2px 2px 2px #A7C7D4;
 }

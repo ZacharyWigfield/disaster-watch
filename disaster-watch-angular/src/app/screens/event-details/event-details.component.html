@@ -1,88 +1,92 @@
-<div class="event-details-container">
+<div id="event-details-container" class="screen-container">
     <p-toast position="top-right" />
     @if (floodEvent()) {
-    <div class="event-details-content">
-        <div class="event-details-row">
-            <p-card header="Event ID:">
-                <span>{{id()}}</span>
-            </p-card>
+    <div class="half-page-container">
+        <div class="header-info-container">
+            <p-card class="header-info-card">
 
-            <p-card header="Time since event:">
-                @if(daysSinceEvent()){
-                <span>{{daysSinceEvent()}} days</span>
-                }
-                <span> {{hoursSinceEvent()}} hours</span>
-            </p-card>
+                <div class="event-details-row">
+                    <p-card class="header-info-small-card" header="Event ID:">
+                        <span>{{id()}}</span>
+                    </p-card>
 
-            <p-card header="Distance between user and event:">
-                @if(floodEvent()?.userToEventDistance){
-                <div>
-                    <span>{{floodEvent()?.userToEventDistance | number:'1.0-0' }} miles</span>
+                    <p-card class="header-info-small-card" header="Time since event:">
+                        @if(daysSinceEvent()){
+                        <span>{{daysSinceEvent()}} days</span>
+                        }
+                        <span> {{hoursSinceEvent()}} hours</span>
+                    </p-card>
+
+                    <p-card class="header-info-small-card" header="Distance between user and event:">
+                        @if(floodEvent()?.userToEventDistance){
+                        <div>
+                            <span>{{floodEvent()?.userToEventDistance | number:'1.0-0' }} miles</span>
+                        </div>
+                        }
+                        @else {
+                        <div>
+                            <span>No user location entered</span>
+                        </div>
+                        }
+                    </p-card>
+
+                    <p-card class="header-info-small-card" header="Is event still occuring:">
+                        <span>{{isEventStillOccuring()}}</span>
+                    </p-card>
                 </div>
-                }
-                @else {
-                <div>
-                    <span>No user location entered</span>
-                </div>
-                }
-            </p-card>
 
-            <p-card header="Is event still occuring:">
-                <span>{{isEventStillOccuring()}}</span>
+                <div class="event-details-row">
+                    <p-card class="header-info-small-card" header="Event Type:">
+                        <span>{{floodEvent()!.event}}</span>
+                    </p-card>
+
+                    <p-card class="header-info-small-card" header="Severity:">
+                        <span>{{floodEvent()!.severity}}</span>
+                    </p-card>
+
+                    <p-card class="header-info-small-card" header="Certainty:">
+                        <span>{{floodEvent()!.certainty}}</span>
+                    </p-card>
+
+                    <p-card class="header-info-small-card" header="Urgency:">
+                        <span>{{floodEvent()!.urgency}}</span>
+                    </p-card>
+
+                    <p-card class="header-info-small-card" header="Effective:">
+                        <span>{{floodEvent()!.effective}}</span>
+                    </p-card>
+
+                    <p-card class="header-info-small-card" header="Expires:">
+                        <span>{{floodEvent()!.expires}}</span>
+                    </p-card>
+                </div>
+
+                <p-card class="header-info-small-card">
+                    <div>{{floodEvent()!.description}}</div>
+                </p-card>
+
             </p-card>
         </div>
 
-        <p-card>
-            <div class="event-details-row">
-                <div>
-                    <div>Event Type:</div>
-                    <div>{{floodEvent()!.event}}</div>
-                </div>
-
-                <div>
-                    <div>Severity:</div>
-                    <div>{{floodEvent()!.severity}}</div>
-                </div>
-
-                <div>
-                    <div>Certainty:</div>
-                    <div>{{floodEvent()!.certainty}}</div>
-                </div>
-
-                <div>
-                    <div>Urgency:</div>
-                    <div>{{floodEvent()!.urgency}}</div>
-                </div>
-
-                <div>
-                    <div>Effective:</div>
-                    <div>{{floodEvent()!.effective | date:'short'}}</div>
-                </div>
-
-                <div>
-                    <div>Expires:</div>
-                    <div>{{floodEvent()!.expires | date:'short'}}</div>
-                </div>
-            </div>
-        </p-card>
-
-        <p-card>
-            <div>{{floodEvent()!.description}}</div>
-        </p-card>
-
         @if(intersectingEvents()){
-        <div>
-            <h1>{{intersectingEvents().length}} other events at this location in the last year:</h1>
-            <div>
-                <app-disaster-table [events]="intersectingEvents()" [paginateRows]="5"></app-disaster-table>
-            </div>
+        <div class="intersecting-events-container">
+            <p-card class="content-container-card">
+                <div class="table-header-container">
+                    <h2>{{intersectingEvents().length}} other events at this location in the last year:</h2>
+                </div>
+                <div class="table-container">
+                    <app-disaster-table [events]="intersectingEvents()" [paginateRows]="10"></app-disaster-table>
+                </div>
+            </p-card>
         </div>
         }
     </div>
 
-    <div id="map-container" class="event-details-content">
-        <app-event-map [mapId]="'event-details'" [floodEvents]="[floodEvent()!]" [userLat]="searchService.userLocation().lat"
-            [userLong]="searchService.userLocation().long" />
+    <div id="map-container" class="half-page-container">
+        <p-card class="content-container-card">
+            <app-event-map [mapId]="'event-details'" [floodEvents]="[floodEvent()!]"
+                [userLat]="searchService.userLocation().lat" [userLong]="searchService.userLocation().long" />
+        </p-card>
     </div>
     }
 </div>

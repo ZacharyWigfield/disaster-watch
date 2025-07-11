@@ -1,20 +1,64 @@
-.event-details-container {
+#event-details-container {
     height: 100vh;
     display: flex;
     flex-direction: row;
+    justify-content: space-evenly;
 }
 
-.event-details-content {
+.half-page-container {
     height: 100%;
-    width: 50%;
+    width: 45%;
+    padding: 1rem;
 }
 
 #map-container {
     height: 100%;
 }
 
-.event-details-row{
+.event-details-row {
     display: flex;
     flex-direction: row;
-     justify-content: space-between;
+    justify-content: space-evenly;
+    padding: 1rem;
+}
+
+.content-container-card {
+    height: 100%;
+}
+
+p-card.content-container-card ::ng-deep .p-card-body {
+    height: 100%;
+}
+
+p-card.content-container-card ::ng-deep .p-card-content {
+    height: 100%;
+}
+
+.header-info-container {
+    height: 40%;
+}
+
+.header-info-card {
+    background: #0D3449;
+    width: 100%;
+}
+
+.header-info-small-card {
+    background: white;
+}
+
+.intersecting-events-container {
+    height: 60%;
+}
+
+.table-header-container {
+    background: #0D3449;
+    height: 15%;
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+
+.table-container {
+    height: 85%;
 }
