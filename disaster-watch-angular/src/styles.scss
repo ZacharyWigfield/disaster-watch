@@ -1,5 +1,7 @@
-/* You can add global styles to this file, and also import other style files */
-html, body {
+@import "primeicons/primeicons.css";
+
+html,
+body {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -7,4 +9,16 @@ html, body {
 
 h1 {
   font-size: 5rem;
+}
+
+body .p-card {
+  background: #7FADC0;
+  outline: 2px solid #A7C7D4;
+  // background: #3C829E;
+
+}
+
+body .p-card h1 {
+  color: #0D3449;
+  text-shadow: 2px 2px 2px #A7C7D4;
 }

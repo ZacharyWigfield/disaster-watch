@@ -1,5 +1,5 @@
 <p-table [value]="events()" [paginator]="true" [rows]="paginateRows()" sortField="effective" [sortOrder]="-1"
-    [scrollable]="true" scrollHeight="flex">
+    [scrollable]="true" scrollHeight="flex" stripedRows>
     <ng-template pTemplate="header">
         <tr>
             <th pSortableColumn="id">
@@ -28,24 +28,35 @@
             </th>
         </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-warning>
+    <ng-template pTemplate="body" let-event>
         <tr>
-            <td>{{warning.id}}</td>
+            <td><p-tag severity="contrast" [value]="event.id" /></td>
             <td>
-                <ul>
-                    @for (area of warning.areaDesc; track area) {
-                    <li>
-                        <a [routerLink]="['/details', warning.id]">{{area}}</a>
-                    </li>
-                    }
-                </ul>
+                @for (area of event.areaDesc; track area) {
+                <div>
+                    <a [routerLink]="['/details', event.id]">{{area}}</a>
+                </div>
+                }
             </td>
-            <td>{{ warning.event }}</td>
-            <td>{{ warning.certainty }}</td>
-            <td>{{ warning.severity }}</td>
-            <td>{{ warning.urgency }}</td>
-            <td>{{ warning.effective | date:'short' }}</td>
-            <td>{{ warning.expires | date:'short' }}</td>
+            <td><p-tag severity="info" [value]="event.event" /></td>
+            <td>
+                @if(event.certainty == "Observed"){
+                <p-tag icon="pi pi-eye" severity="secondary" [value]="event.certainty" />
+                }@else {
+                <p-tag icon="pi pi-check" severity="secondary" [value]="event.certainty" /> }
+            </td>
+            <td>
+                @if(event.severity == "Extreme"){
+                <p-tag severity="contrast" [value]="event.severity" />
+                }@else if(event.severity == "Severe"){
+                <p-tag severity="danger" [value]="event.severity" />
+                }@else if(event.severity == "Moderate"){
+                <p-tag severity="warn" [value]="event.severity" />
+                }
+            </td>
+            <td><p-tag severity="secondary" [value]="event.urgency" /></td>
+            <td>{{ event.effective | date:'short' }}</td>
+            <td>{{ event.expires | date:'short' }}</td>
         </tr>
     </ng-template>
     <ng-template pTemplate="emptymessage">
