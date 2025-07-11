@@ -4,7 +4,7 @@
     <div class="half-page-container">
         <div class="event-details-container">
             <p-card class="event-details-card">
-               
+
                 <div class="event-details-row">
                     <p-card class="event-details-small-card" header="Event ID:">
                         <span>{{id()}}</span>
@@ -61,9 +61,11 @@
                     </p-card>
                 </div>
 
-                <p-card class="event-details-small-card">
-                    <div>{{floodEvent()!.description}}</div>
-                </p-card>
+                <div class="event-details-row">
+                    <p-card class="event-details-small-card">
+                        <div>{{floodEvent()!.description}}</div>
+                    </p-card>
+                </div>
 
             </p-card>
         </div>
