@@ -21,7 +21,7 @@ describe('DisasterListComponent', () => {
   })
   class MockDisasterTableComponent {
     @Input() events!: FloodEvent[];
-    @Input() rows!: number;
+    @Input() paginateRows!: number;
   }
 
   beforeEach(async () => {
