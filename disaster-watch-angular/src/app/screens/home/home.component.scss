@@ -2,13 +2,13 @@
     height: 100vh;
     text-align: center;
 
-    background: hsla(0, 0%, 100%, 1);
+    background: hsla(197, 34%, 75%, 1);
 
-    background: linear-gradient(0deg, hsla(0, 0%, 100%, 1) 0%, hsla(197, 78%, 30%, 1) 83%);
+    background: linear-gradient(270deg, hsla(197, 34%, 75%, 1) 0%, hsla(197, 78%, 30%, 1) 100%);
 
-    background: -moz-linear-gradient(0deg, hsla(0, 0%, 100%, 1) 0%, hsla(197, 78%, 30%, 1) 83%);
+    background: -moz-linear-gradient(270deg, hsla(197, 34%, 75%, 1) 0%, hsla(197, 78%, 30%, 1) 100%);
 
-    background: -webkit-linear-gradient(0deg, hsla(0, 0%, 100%, 1) 0%, hsla(197, 78%, 30%, 1) 83%);
+    background: -webkit-linear-gradient(270deg, hsla(197, 34%, 75%, 1) 0%, hsla(197, 78%, 30%, 1) 100%);
 }
 
 #search-and-banner {
@@ -39,7 +39,7 @@
     line-height: 2;
     font-family: IBM Plex Serif;
     color: #0D3449;
-    text-shadow: 2px 2px 2px black;   
+    text-shadow: 2px 2px 2px black;
 
     // color: white;
     // text-shadow: 2px 2px 2px #0D3449;
