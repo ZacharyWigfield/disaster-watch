@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EventMapComponent } from './event-map.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import * as L from 'leaflet'; 
+import * as L from 'leaflet';
 import { mockFloodEvents, mockSingleFloodEvent, mockSingleFloodEventNoPolygon } from '../../../assets/mock-data/flood-event-mock-data';
 import { SearchService } from '../../services/search.service';
 import { Router } from '@angular/router';
@@ -35,6 +35,13 @@ describe('EventMapComponent', () => {
     fixture.componentRef.setInput('floodEvents', mockFloodEvents);
     fixture.componentRef.setInput('userLat', 31.59);
     fixture.componentRef.setInput('userLong', -94.88);
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+  });
+
+  afterEach(() => {
+    document.getElementById('1')?.remove();
   });
 
   it("should input values properly", () => {
@@ -68,11 +75,12 @@ describe('EventMapComponent', () => {
 
   it('should call initMap when floodEvents changes to new value', async () => {
     const spy = spyOn<any>(component, 'initMap');
-    fixture.detectChanges();
+
+    fixture.componentRef.setInput('mapId', "2");
     fixture.componentRef.setInput('floodEvents', [mockSingleFloodEvent]);
-    fixture.componentRef.setInput('mapId', "1");
-    await Promise.resolve();
+
     fixture.detectChanges();
+    await Promise.resolve();
 
     expect(spy).toHaveBeenCalled();
   });
@@ -92,12 +100,16 @@ describe('EventMapComponent', () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it('should remove existing map before initializing a new one', () => {
-    fixture.detectChanges();
-    const mapMock = jasmine.createSpyObj('map', ['remove']);
-    component['map'] = mapMock as any;
-    component['initMap']('1', [mockSingleFloodEvent]);
+  it('should remove existing map before initializing a new one', async () => {
+    const mapInstance = component['map'];
+    const removeSpy = mapInstance ? spyOn(mapInstance, 'remove').and.callThrough() : null;
 
-    expect(mapMock.remove).toHaveBeenCalled();
+    fixture.componentRef.setInput('mapId', '2');
+    fixture.componentRef.setInput('floodEvents', [mockSingleFloodEvent]);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    await Promise.resolve();
+
+    expect(removeSpy).toHaveBeenCalled();
   });
 });

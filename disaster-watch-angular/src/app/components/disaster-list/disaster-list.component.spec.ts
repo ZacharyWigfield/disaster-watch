@@ -38,7 +38,7 @@ describe('DisasterListComponent', () => {
         imports: [DisasterTableComponent]
       },
       add: {
-        imports: [MockDisasterTableComponent] 
+        imports: [MockDisasterTableComponent]
       }
     })
       .compileComponents();
@@ -46,13 +46,14 @@ describe('DisasterListComponent', () => {
     searchService = TestBed.inject(SearchService);
     fixture = TestBed.createComponent(DisasterListComponent);
     component = fixture.componentInstance;
+
+    searchService.floodEvents.set(mockFloodEvents)
     fixture.detectChanges();
+    await fixture.whenStable();
+    await Promise.resolve();
   });
 
   it('should display component when event results are > 0, then hide when results are = 0', () => {
-    searchService.floodEvents.set(mockFloodEvents)
-    fixture.detectChanges()
-
     let containerDiv = fixture.nativeElement.querySelector(".content-container")
     expect(containerDiv).toBeTruthy()
 
@@ -64,17 +65,11 @@ describe('DisasterListComponent', () => {
   })
 
   it('should display a div with list of events', () => {
-    searchService.floodEvents.set(mockFloodEvents)
-    fixture.detectChanges()
-
     const disasterList = fixture.nativeElement.querySelector("#disaster-list-div")
     expect(disasterList).toBeTruthy()
   })
 
   it('should display a div with event map', () => {
-    searchService.floodEvents.set(mockFloodEvents)
-    fixture.detectChanges()
-
     const eventMap = fixture.nativeElement.querySelector("#map-div")
     expect(eventMap).toBeTruthy()
   })
