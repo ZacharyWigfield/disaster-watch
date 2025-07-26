@@ -67,7 +67,7 @@ describe('EventDetailsComponent', () => {
 
   it('should load component with valid param ID', () => {
     fixture.detectChanges();
-    const containerDiv = fixture.nativeElement.querySelector(".event-details-container")
+    const containerDiv = fixture.nativeElement.querySelector("#event-details-container")
 
     expect(containerDiv).toBeTruthy()
   });
